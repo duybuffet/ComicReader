@@ -20,3 +20,6 @@ git commit -a
 6. Đẩy file đã commit lên
 git push origin master
 
+
+7. Cập nhật lại toàn bộ repo
+git pull origin master
