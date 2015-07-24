@@ -14,7 +14,7 @@ from django.db import models
 
 class AccessHistory(models.Model):
     device = models.ForeignKey('Device')
-    request_date = models.DateTimeField(blank=True, null=True)
+    date_request = models.DateTimeField(blank=True, null=True)
     num_request = models.IntegerField(blank=True, null=True)
 
     class Meta:
@@ -45,6 +45,7 @@ class Chapter(models.Model):
     ebook = models.ForeignKey('Ebook')
     name = models.TextField()
     url = models.TextField()
+    description = models.TextField(blank=True, null=True)
     status = models.CharField(max_length=45, blank=True, null=True)
     update = models.DateTimeField(blank=True, null=True)
 
@@ -64,16 +65,15 @@ class Device(models.Model):
 
 
 class Ebook(models.Model):
-    name = models.TextField()
-    url = models.TextField()
-    cover = models.TextField()
+    name = models.CharField(max_length=255, blank=True, null=True)
+    url = models.TextField(blank=True, null=True)
+    cover = models.TextField(blank=True, null=True)
     author = models.CharField(max_length=225, blank=True, null=True)
-    update = models.DateTimeField()
+    update = models.DateTimeField(blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     complete = models.IntegerField(blank=True, null=True)
     check = models.IntegerField(blank=True, null=True)
-    ebook_source = models.TextField(blank=True, null=True)
-    source = models.ForeignKey('SourceEbook', blank=True, null=True)
+    totalchap = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -106,21 +106,11 @@ class Image(models.Model):
     chapter = models.ForeignKey(Chapter)
     url = models.TextField()
     status = models.IntegerField(blank=True, null=True)
-    path = models.TextField(blank=True, null=True)
-    name = models.TextField()
+    name = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'image'
-
-
-class SourceEbook(models.Model):
-    url = models.TextField()
-    total_chap = models.IntegerField()
-
-    class Meta:
-        managed = False
-        db_table = 'source_ebook'
 
 
 class ViewCount(models.Model):
