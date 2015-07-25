@@ -7,3 +7,5 @@ phuong changes
 phuong change from computer
 
 Duy changes from his window
+
+Duy changes from pycharm linux
