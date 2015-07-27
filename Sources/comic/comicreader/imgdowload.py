@@ -123,6 +123,7 @@ input ={'ebookname' : 'Naruto', 'chaptername': 'Naruto Chap 002_test', 'urlimg':
 
 
 def dirNameEbook(ebookname):
+
     path = os.path.join(PATH_DATA_IMAGE, ebookname)
     if not os.path.exists(path):
         os.mkdir(os.path.join(path),0755)
@@ -131,6 +132,7 @@ def dirNameEbook(ebookname):
     return  path
 
 def dirNameChapter(chaptername):
+
     path =  os.path.join(dirNameEbook(input['ebookname']),chaptername)
     if not os.path.exists(path):
         os.mkdir(path,0755)
@@ -141,6 +143,7 @@ def dowloadImage(input):
     pass
 
 def download_photo(path, img_url, filename):
+
     file_path = "%s/%s" % (path, filename)
     downloaded_image = file(file_path, "wb")
     image_on_web = urllib.urlopen(img_url)
