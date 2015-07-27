@@ -1,8 +1,9 @@
 __author__ = 'zero'
 
 import urllib
+import urllib2
 from bs4 import BeautifulSoup
-from comicreader.models import *
+#from comicreader.models import *
 
 def crawlCategory():
     """
@@ -73,16 +74,27 @@ def crawlAllEbook():
         print "error! disconnect with server (method: crawlAllEbook )"
 
 
-def crawlInforEbook(ebook):
-    id = ebook.id
-    url = ebook.url
+def crawlInforEbook():
+    #id = ebook.id
+    #url = ebook.url
     url = 'http://blogtruyen.com/truyen/kuroko-no-basket-doujinshi'
     print "----->  crawlInforEbook()"
     html = urllib.urlopen(url)
     soup = BeautifulSoup(html.read())
-    divDecription = soup.findAll('div',{'class':'description'})
-    print divDecription
 
-ebook = Ebook()
-ebook.id = 1
-crawlInforEbook(ebook)
+    h1 = soup.findAll('h1', {'class':'entry-title'})
+    name = h1[0].text
+
+    divcontent = soup.findAll('div',{'class':'content'})
+    description = divcontent[0].text
+
+    divthumbnail = soup.findAll('div', {'class':'thumbnail'})
+    cover =  divthumbnail[0].findAll('img')[0]['src']
+
+    divDecription = soup.findAll('div',{'class':'description'})
+    pNulls = divDecription[0].findAll('p')
+    for pNull in pNulls:
+        if pNull.text.startswith('Ngu'):
+            print pNull
+
+crawlInforEbook()
