@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'comicreader',
+    'crawl',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -81,7 +82,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'comicreader',
         'USER': 'root',
-        'PASSWORD' : '123456',
+        'PASSWORD' : 'sang#@1992',
         'HOST' : 'localhost',
         'PORT' : '3306',
     }
@@ -106,3 +107,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+# Folder dowload images
+PATH_DATA_IMAGE='/home/sang/Projects/ComicReader/Downloads/images/'

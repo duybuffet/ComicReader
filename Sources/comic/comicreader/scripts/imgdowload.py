@@ -1,10 +1,22 @@
-from struct import pack
-import urllib
-
 __author__ = 'sang'
+# -*- coding: utf-8 -*-
+import urllib
 import os
+import sys
 
-PATH_DATA_IMAGE='/home/sang/Projects/ComicReader/Downloads/images/'
+parentdir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, parentdir)
+
+env = "comic.settings"
+
+# setup_environ(settings)
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", env)
+
+from django.core.wsgi import get_wsgi_application
+application = get_wsgi_application()
+
+from django.conf import settings
+
 urls = [
     'http://2.bp.blogspot.com/_93k9xmLQtxc/TdQjo6h37YI/AAAAAAAAE9w/eawu2sxl5aI/Naruto%20chap%201-NARUTO01_-001.jpg?imgmax=3000',
     'http://2.bp.blogspot.com/_93k9xmLQtxc/TdQjrjYcKZI/AAAAAAAAE-A/fNoh2eISyIo/Naruto%20chap%201-NARUTO01_-002.jpg?imgmax=3000',
@@ -124,26 +136,40 @@ input ={'ebookname' : 'Naruto', 'chaptername': 'Naruto Chap 002_test', 'urlimg':
 
 def dirNameEbook(ebookname):
 
-    path = os.path.join(PATH_DATA_IMAGE, ebookname)
+    """
+    :param ebookname:
+    :return:
+    """
+
+    path = os.path.join(settings.PATH_DATA_IMAGE, ebookname)
     if not os.path.exists(path):
         os.mkdir(os.path.join(path),0755)
     else:
-        print 'Folder %s exits' %ebookname
+        #print 'Folder %s exits' %ebookname
+        pass
     return  path
 
 def dirNameChapter(chaptername):
-
+    """
+    :param chaptername:
+    :return:
+    """
     path =  os.path.join(dirNameEbook(input['ebookname']),chaptername)
     if not os.path.exists(path):
         os.mkdir(path,0755)
     else:
-        print 'Folder %s exits' %chaptername
+        #print 'Folder %s exits' %chaptername
+        pass
     return  path
 def dowloadImage(input):
     pass
 
 def download_photo(path, img_url, filename):
-
+    """
+    :param path:
+    :param filename:
+    :return:
+    """
     file_path = "%s/%s" % (path, filename)
     downloaded_image = file(file_path, "wb")
     image_on_web = urllib.urlopen(img_url)

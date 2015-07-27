@@ -2,11 +2,8 @@ __author__ = 'Duy'
 
 import os, sys
 
-"""
-    Tuy tung may ma thiet lap bien moi truong
-"""
-sys.path.append("/home/duy/Work/NextG/git-repos/ComicReader/Sources/comic")
-sys.path.append("/home/duy/Work/NextG/git-repos/ComicReader/Sources/comic/comic")
+sys.path.append("/home/sang/Projects/ComicReader/Sources/comic")
+sys.path.append("/home/sang/Projects/ComicReader/Sources/comic/comic")
 os.environ.setdefault("DJANGO_SETTINGS_MODULE","comic.settings")
 
 from django.utils import timezone
@@ -110,15 +107,15 @@ def insert_images(images, chapter_id):
 
 """ TEST DATA """
 # chapter = Chapter(name="def",url="xyz")
-# print insert_chapter([chapter],2)
+# print insert_chapters([chapter],2)
 
 # image = Image(url="aaa",name="bbb")
-# print insert_image([image], 1)
+# print insert_images([image], 1)
 # cat = Category(name='cat3', description='aloxo')
 # cat2 = Category(name='cat4', description='aloxo')
 # print insert_categories([cat, cat2])
 
-# ebook = Ebook(url='https://blogtruyen.com/yugioh',totalchap=169)
-# print insert_ebook([ebook])
+ebook = Ebook(url='https://blogtruyen.com/yugioh',totalchap=169)
+print insert_ebooks([ebook])
 
 # print update_ebook_and_add_bookcat(2,'yaiba','ozawa','1','',timezone.now(),1,1,['cat3','cat4'])
