@@ -1,25 +1,9 @@
 __author__ = 'zero'
 
-# -*- coding: utf-8 -*-
-import os
-import sys
-
-parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, parentdir)
-
-env = "settings"
-
-# setup_environ(settings)
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", env)
-
-from django.core.wsgi import get_wsgi_application
-application = get_wsgi_application()
-
 import urllib
 import urllib2
 from bs4 import BeautifulSoup
-from datetime import datetime
-from comicreader.models import *
+#from comicreader.models import *
 
 def crawlCategory():
     """
@@ -62,7 +46,6 @@ def crawlAllEbook():
     :return: list Object Ebook
     """
     print "Run crawlAllEbook()"
-    URL = "http://blogtruyen.com/ListStory/GetListStory"
     try:
         listEbook = []
         for i in range(maxPage()):
@@ -91,19 +74,11 @@ def crawlAllEbook():
         print "error! disconnect with server (method: crawlAllEbook )"
 
 
-def crawlInforEbook(ebook):
-    """
-    thieu' thuoc tinh category cua ebook
-    => list category chua bien luu o dau?
-
-    :param ebook:
-    :return:
-    """
-
-
-    id = ebook.id
-    url = ebook.url
-    print "run crawlInforEbook()"
+def crawlInforEbook():
+    #id = ebook.id
+    #url = ebook.url
+    url = 'http://blogtruyen.com/truyen/kuroko-no-basket-doujinshi'
+    print "----->  crawlInforEbook()"
     html = urllib.urlopen(url)
     soup = BeautifulSoup(html.read())
 
@@ -118,46 +93,8 @@ def crawlInforEbook(ebook):
 
     divDecription = soup.findAll('div',{'class':'description'})
     pNulls = divDecription[0].findAll('p')
-    author = ''
-    update = ''
-    complete = ''
-    category = []
     for pNull in pNulls:
-        #print pNull.text
-        try:
-            if pNull.findAll('a')[0]['class'][0]=='color-green':
-                author = pNull.findAll('a')[0].text
-        except:
-            pass
+        if pNull.text.startswith('Ngu'):
+            print pNull
 
-        try:
-            if pNull['class'][0]=='clear-fix':
-                update = pNull.findAll('span')[0].text
-        except:
-            pass
-
-        try:
-            if pNull.findAll('span')[1]['class'][0]=='color-red':
-                complete = pNull.findAll('span')[1].text
-        except:
-            pass
-
-        try:
-            if pNull.findAll('span')[0]['class'][0]=='category':
-                categorys = pNull.findAll('span')
-                for element in categorys:
-                    category.append(element.text)
-        except:
-            pass
-    ebook = Ebook()
-    ebook.id = id
-    ebook.name = name
-    ebook.author = author
-    ebook.cover = cover
-    ebook.description = description
-    ebook.update = update
-    ebook.complete = complete
-
-    return ebook
-    print "end crawlInforEbook()"
-
+crawlInforEbook()
