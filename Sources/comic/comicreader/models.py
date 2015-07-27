@@ -7,7 +7,6 @@
 #
 # Also note: You'll have to insert the output of 'django-admin sqlcustom [app_label]'
 # into your database.
-
 from __future__ import unicode_literals
 
 from django.db import models
@@ -33,7 +32,6 @@ class Bookcat(models.Model):
 
 
 class Category(models.Model):
-    id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=225)
     description = models.TextField(blank=True, null=True)
 
@@ -41,16 +39,13 @@ class Category(models.Model):
         managed = False
         db_table = 'category'
 
-    def __str__(self):
-        return self.name
-
 
 class Chapter(models.Model):
     ebook = models.ForeignKey('Ebook')
     name = models.TextField()
     url = models.TextField()
     description = models.TextField(blank=True, null=True)
-    status = models.CharField(max_length=45, blank=True, null=True)
+    status = models.IntegerField(blank=True, null=True)
     update = models.DateTimeField(blank=True, null=True)
 
     class Meta:
@@ -59,7 +54,6 @@ class Chapter(models.Model):
 
 
 class Device(models.Model):
-    id = models.IntegerField(primary_key=True)
     last_date = models.DateTimeField()
     block = models.IntegerField()
 
@@ -94,12 +88,13 @@ class Favorite(models.Model):
 
 
 class Feedback(models.Model):
-    id = models.IntegerField(primary_key=True)
     device = models.ForeignKey(Device, blank=True, null=True)
     title = models.TextField(blank=True, null=True)
     send_date = models.DateField(blank=True, null=True)
     status = models.IntegerField(blank=True, null=True)
     description = models.TextField(blank=True, null=True)
+    chapter = models.ForeignKey(Chapter, blank=True, null=True)
+    ebook = models.ForeignKey(Ebook, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -111,6 +106,7 @@ class Image(models.Model):
     url = models.TextField()
     status = models.IntegerField(blank=True, null=True)
     name = models.CharField(max_length=255, blank=True, null=True)
+    real_path = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = False

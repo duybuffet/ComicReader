@@ -83,7 +83,7 @@ def insert_chapters(chapters, ebook_id):
         ebook = Ebook.objects.get(pk=ebook_id)
         for chapter in chapters:
             chapter.ebook = ebook
-            chapter.status = "true"
+            chapter.status = 0
             chapter.save()
     except:
         return 0
