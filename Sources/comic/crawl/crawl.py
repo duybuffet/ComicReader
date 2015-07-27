@@ -76,6 +76,13 @@ def crawlAllEbook():
 def crawlInforEbook(ebook):
     id = ebook.id
     url = ebook.url
+    url = 'http://blogtruyen.com/truyen/kuroko-no-basket-doujinshi'
     print "----->  crawlInforEbook()"
-    html = urllib.urlopen("http://blogtruyen.com/danhsach/tatca")
+    html = urllib.urlopen(url)
     soup = BeautifulSoup(html.read())
+    divDecription = soup.findAll('div',{'class':'description'})
+    print divDecription
+
+ebook = Ebook()
+ebook.id = 1
+crawlInforEbook(ebook)
