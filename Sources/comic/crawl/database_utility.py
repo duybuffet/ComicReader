@@ -28,7 +28,7 @@ def insert_categories(categories):
     return 1
 
 
-def insert_ebook(ebooks):
+def insert_ebooks(ebooks):
     """
     Insert ebooks into database
     :param: ebooks - list of Ebook objects
@@ -71,7 +71,7 @@ def update_ebook_and_add_bookcat(id,name,author,cover,description,update,complet
     return 1
 
 
-def insert_chapter(chapters, ebook_id):
+def insert_chapters(chapters, ebook_id):
     """
     Insert chapters into database
     :param: chapters - list of Chapter objects
@@ -90,7 +90,7 @@ def insert_chapter(chapters, ebook_id):
     return 1
 
 
-def insert_image(images, chapter_id):
+def insert_images(images, chapter_id):
     """
     Insert images into database
     :param: images - list of Image objects
