@@ -20,6 +20,8 @@
           <option value="Sources.comic.comicreader.scripts.database_utility.Chapter" />
           <option value="Sources.comic.comicreader.scripts.QueryDatabase.Chapter" />
           <option value="Sources.comic.comicreader.scripts.QueryDatabase.Image" />
+          <option value="Sources.comic.comicreader.scripts.crawl.comicreader" />
+          <option value="Sources.comic.comicreader.scripts.crawl.Ebook" />
         </list>
       </option>
     </inspection_tool>
