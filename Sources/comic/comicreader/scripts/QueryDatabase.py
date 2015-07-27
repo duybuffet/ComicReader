@@ -20,24 +20,25 @@ from comicreader.models import *
 
 def getEbook():
     listEbook = []
-    for eb in Ebook.objects.raw('SELECT * FROM ebook'):
+    sql= 'SELECT id, url FROM ebook'
+    for eb in Ebook.objects.raw(sql):
         listEbook.append(eb)
     return listEbook
 
-
-def getChapter(ebook_id):
+def getChapter():
     listChap = []
-    for chap in Chapter.objects.raw('SELECT * FROM chapter WHERE ebook_id = %s', [ebook_id]):
+    sql= 'SELECT id, url FROM chapter'
+    for chap in Chapter.objects.raw(sql):
         listChap.append(chap)
     return listChap
 
-
-def getChapter(chapter_id):
-    listimage = []
-    for image in Image.objects.raw('SELECT * FROM image WHERE chapter_id = %s', [chapter_id]):
-        listimage.append(image)
-    return listimage
-
+def getDownload():
+    listImage = []
+    sql= 'SELECT a.id, a.name, b.id, b.name, c.id, c.name, c.url FROM ebook a, chapter b, image c WHERE a.id = b.ebook_id AND b.ebook_id = chapter_id;'
+    for image in Image.objects.raw(sql):
+        listImage.append(image)
+    return listImage
 if __name__ == '__main__':
-    for chap in getChapter(3):
-        print chap.url
+    getEbook()
+    getChapter()
+    getDownload()
