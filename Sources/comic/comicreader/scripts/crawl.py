@@ -97,4 +97,4 @@ def crawlInforEbook():
         if pNull.text.startswith('Ngu'):
             print pNull
 
-crawlInforEbook()
+# crawlInforEbook()
