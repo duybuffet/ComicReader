@@ -5,7 +5,7 @@ import json
 
 def getEbook():
     arr_book = []
-    db = MySQLdb.connect(user='root',db='comicreader',passwd ='12345',host ='localhost')
+    db = MySQLdb.connect(user='root',db='comicreader',passwd ='sang#@1992',host ='localhost')
     cursor = db.cursor()
     cursor.execute( 'SELECT id, url FROM ebook;')
     data = cursor.fetchall()
@@ -40,6 +40,6 @@ def getDownload():
     return arr_img
 if __name__ == "__main__":
     getEbook()
-    getChapter()
-    getDownload()
+    # getChapter()
+    # getDownload()
 

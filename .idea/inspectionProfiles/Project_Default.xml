@@ -10,6 +10,7 @@
           <option value="Sources.comic.crawl.database_utility.Category" />
           <option value="Sources.comic.crawl.database_utility.Bookcat" />
           <option value="Sources.comic.crawl.database_utility.Chapter" />
+          <option value="Sources.comic.comicreader.QueryDatabase.comicreader" />
         </list>
       </option>
     </inspection_tool>
