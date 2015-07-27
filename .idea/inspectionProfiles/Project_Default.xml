@@ -11,6 +11,8 @@
           <option value="Sources.comic.crawl.database_utility.Bookcat" />
           <option value="Sources.comic.crawl.database_utility.Chapter" />
           <option value="Sources.comic.comicreader.QueryDatabase.comicreader" />
+          <option value="Sources.comic.comicreader.scripts.QueryDatabase.comicreader" />
+          <option value="Sources.comic.comicreader.scripts.QueryDatabase.Ebook" />
         </list>
       </option>
     </inspection_tool>
