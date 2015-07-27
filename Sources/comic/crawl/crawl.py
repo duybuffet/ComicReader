@@ -1,17 +1,32 @@
 __author__ = 'zero'
 
-import urllib, urllib2
+import urllib
 from bs4 import BeautifulSoup
+from comicreader.models import *
 
-URL = "http://blogtruyen.com/ListStory/GetListStory"
+def crawlCategory():
+    """
+    crawl only category of http://blogtruyen.com
+    :return: list all category
+    """
+    print "----->  crawlCategory()"
+    html = urllib.urlopen("http://blogtruyen.com/danhsach/tatca")
+    soup = BeautifulSoup(html.read())
+    ulCategory = soup.findAll('ul', {'class':'submenu category'})
+    liCategory = ulCategory[0].findAll('li')
+    listCategory = []
+    for element in liCategory:
+        listCategory.append(element.text)
+        print element.text
+
+    return listCategory
+
 def maxPage():
     """
     find max page
     :return: max page
     """
-    """
-    :return:
-    """
+    URL = "http://blogtruyen.com/ListStory/GetListStory"
     opener = urllib2.build_opener(urllib2.HTTPHandler(debuglevel=1))
     data = urllib.urlencode({'Url' : 'tatca', 'OrderBy' : '1', 'PageIndex' : '1'})
     html = opener.open(URL, data=data)
@@ -25,6 +40,10 @@ def maxPage():
     return maxPage
 
 def crawlAllEbook():
+    """
+    crawl url and totalchap of all ebook
+    :return: list Object Ebook
+    """
     print "Run crawlAllEbook()"
     try:
         listEbook = []
@@ -41,7 +60,9 @@ def crawlAllEbook():
                     spans = pNull.findAll('span')
                     url = "http://blogtruyen.com"+spans[0].findAll('a')[0]['href']
                     totalChap = int(spans[1].text)
-                    ebook = {'url':url, 'totalchap':totalChap}
+                    ebook = Ebook()
+                    ebook.url = url
+                    ebook.totalchap = totalChap
                     listEbook.append(ebook)
                 print "====> next  %d" % i
             else:
@@ -52,4 +73,9 @@ def crawlAllEbook():
         print "error! disconnect with server (method: crawlAllEbook )"
 
 
-crawlAllEbook()
+def crawlInforEbook(ebook):
+    id = ebook.id
+    url = ebook.url
+    print "----->  crawlInforEbook()"
+    html = urllib.urlopen("http://blogtruyen.com/danhsach/tatca")
+    soup = BeautifulSoup(html.read())
