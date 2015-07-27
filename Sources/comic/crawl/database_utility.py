@@ -13,13 +13,13 @@ from django.utils import timezone
 from comicreader.models import *
 
 
-"""
-    Ham nay them danh muc vao csdl
-    Input: Danh sach cac doi tuong Category
-    Output: 1 neu them thanh cong
-            0 neu xay ra loi
-"""
 def insert_categories(categories):
+    """
+    Insert categories into database
+    :param: categories - list of Category objects
+    :return: 1 if success
+             0 otherwise
+    """
     try:
         for cat in categories:
             cat.save()
@@ -28,27 +28,29 @@ def insert_categories(categories):
     return 1
 
 
-"""
-    Ham nay them ebook vao csdl
-    Input: doi tuong Ebook
-    Output: 1 neu them thanh cong
-            0 neu xay ra loi
-"""
-def insert_ebook(ebook):
+def insert_ebook(ebooks):
+    """
+    Insert ebooks into database
+    :param: ebooks - list of Ebook objects
+    :return: 1 if success
+             0 otherwise
+    """
     try:
-        ebook.save()
+        for ebook in ebooks:
+            ebook.save()
     except:
         return 0
     return 1
 
 
-"""
-    Ham nay cap nhat ebook va them vao bang danh muc - ebook
-    Input: Cac thuoc tinh cua ebook, danh sach cac doi tuong Category
-    Output: 1 neu them thanh cong
-            0 neu xay ra loi
-"""
 def update_ebook_and_add_bookcat(id,name,author,cover,description,update,complete,check,category):
+    """
+    Update an ebook and insert bookcat into database
+    :param: id,name,author,cover,description,update,complete,check - Ebook's properties
+            category - list of Category
+    :return: 1 if success
+             0 otherwise
+    """
     try:
         # get and update ebook with provided id
         ebook = Ebook.objects.get(pk=id)
@@ -69,51 +71,54 @@ def update_ebook_and_add_bookcat(id,name,author,cover,description,update,complet
     return 1
 
 
-"""
-    Ham nay them chapter vao csdl
-    Input: Doi tuong Chapter, ebook_id
-    Output: 1 neu them thanh cong
-            0 neu xay ra loi
-"""
-def insert_chapter(chapter, ebook_id):
+def insert_chapter(chapters, ebook_id):
+    """
+    Insert chapters into database
+    :param: chapters - list of Chapter objects
+            ebook_id - id of ebook that the chapters belonged to
+    :return: 1 if success
+             0 otherwise
+    """
     try:
         ebook = Ebook.objects.get(pk=ebook_id)
-        chapter.ebook = ebook
-        chapter.status = "true"
-        chapter.save()
+        for chapter in chapters:
+            chapter.ebook = ebook
+            chapter.status = "true"
+            chapter.save()
     except:
         return 0
     return 1
 
 
-"""
-    Ham nay them image vao csdl
-    Input: Doi tuong Image, chapter_id
-    Output: 1 neu them thanh cong
-            0 neu xay ra loi
-"""
-def insert_image(image, chapter_id):
+def insert_image(images, chapter_id):
+    """
+    Insert images into database
+    :param: images - list of Image objects
+            chapter_id - id of chapter that the images belonged to
+    :return: 1 if success
+             0 otherwise
+    """
     try:
         chapter = Chapter.objects.get(pk=chapter_id)
-        image.chapter = chapter
-        image.status = 0
-        image.save()
+        for image in images:
+            image.chapter = chapter
+            image.status = 0
+            image.save()
     except:
         return 0
     return 1
 
-
 """ TEST DATA """
-# chapter = Chapter(name="abc",url="xyz")
-# print insert_chapter(chapter,2)
+# chapter = Chapter(name="def",url="xyz")
+# print insert_chapter([chapter],2)
 
 # image = Image(url="aaa",name="bbb")
-# print insert_image(image, 1)
+# print insert_image([image], 1)
 # cat = Category(name='cat3', description='aloxo')
 # cat2 = Category(name='cat4', description='aloxo')
 # print insert_categories([cat, cat2])
 
-# ebook = Ebook(url='https://blogtruyen.com/dragonball',totalchap=200)
-# print insert_ebook(ebook)
+# ebook = Ebook(url='https://blogtruyen.com/yugioh',totalchap=169)
+# print insert_ebook([ebook])
 
-#print update_ebook_and_add_bookcat(2,'yaiba','ozawa','1','',timezone.now(),1,1,['cat3','cat4'])
+# print update_ebook_and_add_bookcat(2,'yaiba','ozawa','1','',timezone.now(),1,1,['cat3','cat4'])
