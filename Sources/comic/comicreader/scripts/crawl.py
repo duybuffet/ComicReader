@@ -152,8 +152,10 @@ def crawlInforEbook(ebook):
     ebook.description = description
     ebook.update = update
     ebook.complete = complete
+
+    result = {'ebook': ebook, 'categories': category}
     print "end crawlInforEbook()"
-    return ebook
+    return result
 
 
 def crawlChaptersOfEbook(ebook):
