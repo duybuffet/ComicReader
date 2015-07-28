@@ -22,6 +22,8 @@
           <option value="Sources.comic.comicreader.scripts.QueryDatabase.Image" />
           <option value="Sources.comic.comicreader.scripts.crawl.comicreader" />
           <option value="Sources.comic.comicreader.scripts.crawl.Ebook" />
+          <option value="bs4.BeautifulSoup" />
+          <option value="Sources.comic.comicreader.scripts.crawl.Chapter" />
         </list>
       </option>
     </inspection_tool>
