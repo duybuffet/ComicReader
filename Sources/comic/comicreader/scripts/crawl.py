@@ -3,7 +3,7 @@ __author__ = 'zero'
 import urllib
 import urllib2
 from bs4 import BeautifulSoup
-#from comicreader.models import *
+from comicreader.models import *
 
 def crawlCategory():
     """
@@ -17,9 +17,8 @@ def crawlCategory():
     liCategory = ulCategory[0].findAll('li')
     listCategory = []
     for element in liCategory:
-        listCategory.append(element.text)
-        print element.text
-
+        cat = Category(name= element.text )
+        listCategory.append(cat)
     return listCategory
 
 def maxPage():
