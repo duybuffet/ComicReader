@@ -26,6 +26,7 @@ def getEbooks():
     listEbook = []
     sql= 'SELECT id, url FROM ebook'
     for eb in Ebook.objects.raw(sql):
+        print eb.url
         listEbook.append(eb)
     return listEbook
 
