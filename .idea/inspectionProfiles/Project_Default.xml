@@ -22,6 +22,8 @@
           <option value="Sources.comic.comicreader.scripts.QueryDatabase.Image" />
           <option value="Sources.comic.comicreader.scripts.crawl.comicreader" />
           <option value="Sources.comic.comicreader.scripts.crawl.Ebook" />
+          <option value="Sources.comic.comicreader.scripts.QueryDatabase.IMAGE_STATUS_DOWNLOAD_FAILED" />
+          <option value="Sources.comic.comicreader.scripts.QueryDatabase.IMAGE_STATUS_PENDING" />
         </list>
       </option>
     </inspection_tool>
