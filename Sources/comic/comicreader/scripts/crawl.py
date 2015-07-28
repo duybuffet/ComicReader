@@ -94,6 +94,9 @@ def crawlInforEbook(ebook):
 
     :param ebook:
     :return: result = {'ebook':ebook,'categories':categories}
+        ebook: object Ebook
+        categories: list name category (text)
+
     """
     id = ebook.id
     url = ebook.url
