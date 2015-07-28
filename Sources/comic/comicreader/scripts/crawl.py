@@ -156,12 +156,13 @@ def crawlInforEbook(ebook):
     return ebook
 
 
-def crawlChapterEbook(ebook):
+def crawlChaptersOfEbook(ebook):
     """
     crawl all chap of ebook
     :param ebook:
     :return: list Chapter
     """
+    print "Run crawlChaptersOfEbook"
     listChapter = []
     url = ebook.url
     html = urllib.urlopen(url)
@@ -183,4 +184,43 @@ def crawlChapterEbook(ebook):
         print name +"   "+url+"   "+ update
         listChapter.append(chapter)
 
+    print "End crawlChaptersOfEbook"
     return listChapter
+
+def getName(url):
+    """
+    fix name image
+    :param url: url of image
+    :return:name of image
+    """
+    subUrl = url.split('/')
+    max = len(subUrl)
+    oldname = subUrl[max-1]
+    newname = oldname.split("?")[0]
+    return newname
+
+def crawImagesOfChapter(chapter):
+    """
+    crawl all images of a chapter
+    :return: list Image
+    """
+    listImages = []
+    url = chapter.url
+    html = urllib.urlopen(url)
+    soup = BeautifulSoup(html.read())
+    articleContent = soup.findAll('article',{'id':'content'})
+    imgs = articleContent[0].findAll('img')
+    for img in imgs:
+        src = img['src']
+        subSrc = src.split("url=")
+        url = ''
+        if len(subSrc)>1:
+            url = subSrc[1]
+        else:
+            url = src
+        image = Image()
+        image.url = url
+        image.name = getName(url)
+        listImages.append(image)
+
+    return listImages
