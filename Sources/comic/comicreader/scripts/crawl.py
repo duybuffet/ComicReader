@@ -90,11 +90,10 @@ def crawlAllEbook():
 
 def crawlInforEbook(ebook):
     """
-    thieu' thuoc tinh category cua ebook
-    => list category chua bien luu o dau?
+    crawl all information of Ebook
 
     :param ebook:
-    :return: Ebook
+    :return: result = {'ebook':ebook,'categories':categories}
     """
     id = ebook.id
     url = ebook.url
@@ -116,7 +115,7 @@ def crawlInforEbook(ebook):
     author = ''
     update = ''
     complete = ''
-    category = []
+    categories = []
     for pNull in pNulls:
         #print pNull.text
         try:
@@ -139,9 +138,9 @@ def crawlInforEbook(ebook):
 
         try:
             if pNull.findAll('span')[0]['class'][0]=='category':
-                categorys = pNull.findAll('span')
-                for element in categorys:
-                    category.append(element.text)
+                spancategorys = pNull.findAll('span')
+                for element in spancategorys:
+                    categories.append(element.text)
         except:
             pass
     ebook = Ebook()
@@ -152,8 +151,11 @@ def crawlInforEbook(ebook):
     ebook.description = description
     ebook.update = update
     ebook.complete = complete
+
+    result = {'ebook':ebook,'categories':categories}
+
     print "end crawlInforEbook()"
-    return ebook
+    return result
 
 
 def crawlChaptersOfEbook(ebook):
