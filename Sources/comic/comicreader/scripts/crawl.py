@@ -90,10 +90,11 @@ def crawlAllEbook():
 
 def crawlInforEbook(ebook):
     """
-    crawl all information of Ebook
+    thieu' thuoc tinh category cua ebook
+    => list category chua bien luu o dau?
 
     :param ebook:
-    :return: result = {'ebook':ebook,'categories':categories}
+    :return: Ebook
     """
     id = ebook.id
     url = ebook.url
@@ -115,7 +116,7 @@ def crawlInforEbook(ebook):
     author = ''
     update = ''
     complete = ''
-    categories = []
+    category = []
     for pNull in pNulls:
         #print pNull.text
         try:
@@ -138,9 +139,9 @@ def crawlInforEbook(ebook):
 
         try:
             if pNull.findAll('span')[0]['class'][0]=='category':
-                spancategorys = pNull.findAll('span')
-                for element in spancategorys:
-                    categories.append(element.text)
+                categorys = pNull.findAll('span')
+                for element in categorys:
+                    category.append(element.text)
         except:
             pass
     ebook = Ebook()
@@ -151,11 +152,8 @@ def crawlInforEbook(ebook):
     ebook.description = description
     ebook.update = update
     ebook.complete = complete
-
-    result = {'ebook':ebook,'categories':categories}
-
     print "end crawlInforEbook()"
-    return result
+    return ebook
 
 
 def crawlChaptersOfEbook(ebook):
@@ -165,8 +163,7 @@ def crawlChaptersOfEbook(ebook):
     :return: list Chapter
     """
     print "Run crawlChaptersOfEbook"
-    listChapters = []
-    id = ebook.id
+    listChapter = []
     url = ebook.url
     html = urllib.urlopen(url)
     soup = BeautifulSoup(html.read())
@@ -184,10 +181,11 @@ def crawlChaptersOfEbook(ebook):
         chapter.name = name
         chapter.url = url
         chapter.update = update
-        listChapters.append(chapter)
-    result = {"ebook_id" : id, "chapters" : listChapters}
+        print name +"   "+url+"   "+ update
+        listChapter.append(chapter)
+
     print "End crawlChaptersOfEbook"
-    return result
+    return listChapter
 
 def getName(url):
     """
@@ -206,9 +204,7 @@ def crawImagesOfChapter(chapter):
     crawl all images of a chapter
     :return: list Image
     """
-    print "run crawlImagesOfChapter"
     listImages = []
-    id = chapter.id
     url = chapter.url
     html = urllib.urlopen(url)
     soup = BeautifulSoup(html.read())
@@ -226,6 +222,5 @@ def crawImagesOfChapter(chapter):
         image.url = url
         image.name = getName(url)
         listImages.append(image)
-    result = {"chapter_id":id, "images":listImages}
-    print "end crawlImagesOfChapter"
-    return result
+
+    return listImages

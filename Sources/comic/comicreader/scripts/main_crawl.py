@@ -21,4 +21,5 @@ from database_utility import *
 if __name__ == '__main__':
     # insert_categories(crawlCategory())
     insert_ebooks(crawlAllEbook())
+
     #pass
