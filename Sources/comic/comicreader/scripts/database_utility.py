@@ -45,23 +45,23 @@ def insert_ebooks(ebooks):
     return 1
 
 
-def update_ebook_and_add_bookcat(ebook_with_cats):
+def update_ebook_and_add_bookcat(dict_ebook_cats):
     """
     Update an ebook and insert bookcat into database
-    :param: ebook_with_cats - a dictionary with Ebook key and Category[] value
+    :param: dict_ebook_cats - a dictionary contains an ebook and list of category names
     :return: 1 if success
              0 otherwise
     """
     try:
         # get and update ebook with provided id
-        ebook_update = ebook_with_cats.get("ebook")
+        ebook_update = dict_ebook_cats.get("ebook")
         ebook = Ebook.objects.get(pk=ebook_update.id)
         (ebook_update.url, ebook_update.totalchap) = (ebook.url, ebook.totalchap)
         ebook_update.save()
 
         # get categories in db
         categories = []
-        categories_name = ebook_with_cats.get("categories")
+        categories_name = dict_ebook_cats.get("categories")
         for item in categories_name:
             categories.append(Category.objects.filter(name=item)[0])
 
@@ -74,17 +74,16 @@ def update_ebook_and_add_bookcat(ebook_with_cats):
     return 1
 
 
-def insert_chapters(chapters, ebook_id):
+def insert_chapters(dict_chapters_ebook_id):
     """
     Insert chapters into database
-    :param: chapters - list of Chapter objects
-            ebook_id - id of ebook that the chapters belonged to
+    :param: dict_chapters_ebook_id - a dictionary contain chapters and ebook_id
     :return: 1 if success
              0 otherwise
     """
     try:
-        ebook = Ebook.objects.get(pk=ebook_id)
-        for chapter in chapters:
+        ebook = Ebook.objects.get(pk=dict_chapters_ebook_id.get("ebook_id"))
+        for chapter in dict_chapters_ebook_id.get("chapters"):
             chapter.ebook = ebook
             chapter.status = 0
             chapter.save()
@@ -93,17 +92,17 @@ def insert_chapters(chapters, ebook_id):
     return 1
 
 
-def insert_images(images, chapter_id):
+def insert_images(dict_images_chapter_id):
     """
     Insert images into database
-    :param: images - list of Image objects
+    :param: dict_images_chapter_id - a dictionary contains images and chapter_id
             chapter_id - id of chapter that the images belonged to
     :return: 1 if success
              0 otherwise
     """
     try:
-        chapter = Chapter.objects.get(pk=chapter_id)
-        for image in images:
+        chapter = Chapter.objects.get(pk=dict_images_chapter_id.get("chapter_id"))
+        for image in dict_images_chapter_id.get("images"):
             image.chapter = chapter
             image.status = 0
             image.save()
@@ -114,10 +113,10 @@ def insert_images(images, chapter_id):
 """ TEST DATA """
 # chapter = Chapter(name="def",url="xyz")
 # chapter2 = Chapter(name="def",url="xyz322323")
-# print insert_chapters([chapter2],3)
+# print insert_chapters({"ebook_id":1, "chapters":[chapter, chapter2]})
 
 # image = Image(url="aaa",name="bbb")
-# print insert_images([image], 1)
+# print insert_images({"chapter_id":3,"images":[image]})
 # cat = Category(name='cat3', description='aloxo')
 # cat2 = Category(name='cat4', description='aloxo')
 # print insert_categories([cat, cat2])
