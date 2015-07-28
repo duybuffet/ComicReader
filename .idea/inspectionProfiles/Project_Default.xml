@@ -24,6 +24,10 @@
           <option value="Sources.comic.comicreader.scripts.crawl.Ebook" />
           <option value="Sources.comic.comicreader.scripts.QueryDatabase.IMAGE_STATUS_DOWNLOAD_FAILED" />
           <option value="Sources.comic.comicreader.scripts.QueryDatabase.IMAGE_STATUS_PENDING" />
+          <option value="bs4.BeautifulSoup" />
+          <option value="Sources.comic.comicreader.scripts.crawl.Category" />
+          <option value="Sources.comic.comicreader.scripts.crawl.Chapter" />
+          <option value="Sources.comic.comicreader.scripts.crawl.Image" />
         </list>
       </option>
     </inspection_tool>

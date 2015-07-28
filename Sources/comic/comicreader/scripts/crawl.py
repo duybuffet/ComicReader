@@ -3,7 +3,20 @@ __author__ = 'zero'
 import urllib
 import urllib2
 from bs4 import BeautifulSoup
-#from comicreader.models import *
+import os
+import sys
+
+parentdir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, parentdir)
+
+env = "comic.settings"
+
+# setup_environ(settings)
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", env)
+
+from django.core.wsgi import get_wsgi_application
+application = get_wsgi_application()
+from comicreader.models import *
 
 def crawlCategory():
     """
@@ -17,10 +30,10 @@ def crawlCategory():
     liCategory = ulCategory[0].findAll('li')
     listCategory = []
     for element in liCategory:
-        listCategory.append(element.text)
-        print element.text
-
+        cat = Category(name= element.text )
+        listCategory.append(cat)
     return listCategory
+
 
 def maxPage():
     """
@@ -81,10 +94,8 @@ def crawlInforEbook(ebook):
     => list category chua bien luu o dau?
 
     :param ebook:
-    :return:
+    :return: Ebook
     """
-
-
     id = ebook.id
     url = ebook.url
     print "run crawlInforEbook()"
@@ -143,3 +154,73 @@ def crawlInforEbook(ebook):
     ebook.complete = complete
     print "end crawlInforEbook()"
     return ebook
+
+
+def crawlChaptersOfEbook(ebook):
+    """
+    crawl all chap of ebook
+    :param ebook:
+    :return: list Chapter
+    """
+    print "Run crawlChaptersOfEbook"
+    listChapter = []
+    url = ebook.url
+    html = urllib.urlopen(url)
+    soup = BeautifulSoup(html.read())
+    divListchapters = soup.findAll('div',{'id':'list-chapters'})
+    pNulls = divListchapters[0].findAll('p')
+    for pNull in pNulls:
+        spanTitle = pNull.findAll('span',{'class':'title'})
+        name = spanTitle[0].text
+        url = "http://blogtruyen.com"+spanTitle[0].findAll('a')[0]['href']
+
+        spanPublishedDate = pNull.findAll('span',{'class':'publishedDate'})
+        update = spanPublishedDate[0].text
+
+        chapter = Chapter()
+        chapter.name = name
+        chapter.url = url
+        chapter.update = update
+        print name +"   "+url+"   "+ update
+        listChapter.append(chapter)
+
+    print "End crawlChaptersOfEbook"
+    return listChapter
+
+def getName(url):
+    """
+    fix name image
+    :param url: url of image
+    :return:name of image
+    """
+    subUrl = url.split('/')
+    max = len(subUrl)
+    oldname = subUrl[max-1]
+    newname = oldname.split("?")[0]
+    return newname
+
+def crawImagesOfChapter(chapter):
+    """
+    crawl all images of a chapter
+    :return: list Image
+    """
+    listImages = []
+    url = chapter.url
+    html = urllib.urlopen(url)
+    soup = BeautifulSoup(html.read())
+    articleContent = soup.findAll('article',{'id':'content'})
+    imgs = articleContent[0].findAll('img')
+    for img in imgs:
+        src = img['src']
+        subSrc = src.split("url=")
+        url = ''
+        if len(subSrc)>1:
+            url = subSrc[1]
+        else:
+            url = src
+        image = Image()
+        image.url = url
+        image.name = getName(url)
+        listImages.append(image)
+
+    return listImages
