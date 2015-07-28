@@ -1,10 +1,15 @@
 __author__ = 'Duy'
 
-import os, sys
+import os
+import sys
 
-sys.path.append("/home/sang/Projects/ComicReader/Sources/comic")
-sys.path.append("/home/sang/Projects/ComicReader/Sources/comic/comic")
-os.environ.setdefault("DJANGO_SETTINGS_MODULE","comic.settings")
+parentdir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, parentdir)
+
+env = "comic.settings"
+
+# setup_environ(settings)
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", env)
 
 from django.utils import timezone
 from comicreader.models import *
@@ -106,9 +111,9 @@ def insert_images(images, chapter_id):
     return 1
 
 """ TEST DATA """
-chapter = Chapter(name="def",url="xyz")
-chapter2 = Chapter(name="def",url="xyz322323")
-print insert_chapters([chapter2],3)
+# chapter = Chapter(name="def",url="xyz")
+# chapter2 = Chapter(name="def",url="xyz322323")
+# print insert_chapters([chapter2],3)
 
 # image = Image(url="aaa",name="bbb")
 # print insert_images([image], 1)
@@ -116,7 +121,7 @@ print insert_chapters([chapter2],3)
 # cat2 = Category(name='cat4', description='aloxo')
 # print insert_categories([cat, cat2])
 
-# ebook = Ebook(url='https://blogtruyen.com/yugioh',totalchap=169)
-# print insert_ebooks([ebook])
+ebook = Ebook(url='https://blogtruyen.com/yugioh',totalchap=169)
+print insert_ebooks([ebook])
 
 # print update_ebook_and_add_bookcat(2,'yaiba','ozawa','1','',timezone.now(),1,1,['cat3','cat4'])
