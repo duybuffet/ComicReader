@@ -151,7 +151,7 @@ def crawlInforEbook(ebook):
     ebook.author = author
     ebook.cover = cover
     ebook.description = description
-    ebook.update = update
+    ebook.update = datetime.datetime.strptime(update,'%d/%m/%Y %H:%M')
     ebook.complete = complete
     result = {'ebook':ebook,'categories':categories}
     print "end crawlInforEbook()"
@@ -183,7 +183,7 @@ def crawlChaptersOfEbook(ebook):
         chapter = Chapter()
         chapter.name = name
         chapter.url = url
-        chapter.update = update
+        chapter.update = datetime.datetime.strptime(update,'%d/%m/%Y %H:%M')
         listChapters.append(chapter)
     result = {"ebook_id" : id, "chapters" : listChapters}
     print "End crawlChaptersOfEbook"
