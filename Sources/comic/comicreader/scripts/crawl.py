@@ -23,7 +23,7 @@ def crawlCategory():
     return listCategory
 
 def maxPage():
-    """
+    """_
     find max page
     :return: max page
     """
