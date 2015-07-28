@@ -45,23 +45,24 @@ def insert_ebooks(ebooks):
     return 1
 
 
-def update_ebook_and_add_bookcat(id,name,author,cover,description,update,complete,check,category):
+def update_ebook_and_add_bookcat(ebook_with_cats):
     """
     Update an ebook and insert bookcat into database
-    :param: id,name,author,cover,description,update,complete,check - Ebook's properties
-            category - list of Category
+    :param: ebook_with_cats - a dictionary with Ebook key and Category[] value
     :return: 1 if success
              0 otherwise
     """
     try:
         # get and update ebook with provided id
-        ebook = Ebook.objects.get(pk=id)
-        (ebook.name,ebook.author,ebook.cover,ebook.description,ebook.update,ebook.complete,ebook.check) = (name,author,cover,description,update,complete,check)
-        ebook.save()
+        ebook_update = ebook_with_cats.get("ebook")
+        ebook = Ebook.objects.get(pk=ebook_update.id)
+        (ebook_update.url, ebook_update.totalchap) = (ebook.url, ebook.totalchap)
+        ebook_update.save()
 
         # get categories in db
         categories = []
-        for item in category:
+        categories_name = ebook_with_cats.get("categories")
+        for item in categories_name:
             categories.append(Category.objects.filter(name=item)[0])
 
         # update bookcat
@@ -120,8 +121,8 @@ def insert_images(images, chapter_id):
 # cat = Category(name='cat3', description='aloxo')
 # cat2 = Category(name='cat4', description='aloxo')
 # print insert_categories([cat, cat2])
+#
+# ebook = Ebook(id=1, cover='test',name='yugioh', url='https://blogtruyen.com/yugioh',totalchap=169)
+# print insert_ebooks([ebook])
 
-ebook = Ebook(url='https://blogtruyen.com/yugioh',totalchap=169)
-print insert_ebooks([ebook])
-
-# print update_ebook_and_add_bookcat(2,'yaiba','ozawa','1','',timezone.now(),1,1,['cat3','cat4'])
+# print update_ebook_and_add_bookcat({"ebook" : ebook,"categories" : ['cat3','cat4']})
