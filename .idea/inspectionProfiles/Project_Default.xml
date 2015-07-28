@@ -24,15 +24,10 @@
           <option value="Sources.comic.comicreader.scripts.crawl.Ebook" />
           <option value="Sources.comic.comicreader.scripts.QueryDatabase.IMAGE_STATUS_DOWNLOAD_FAILED" />
           <option value="Sources.comic.comicreader.scripts.QueryDatabase.IMAGE_STATUS_PENDING" />
+          <option value="bs4.BeautifulSoup" />
           <option value="Sources.comic.comicreader.scripts.crawl.Category" />
-          <option value="Sources.comic.comicreader.scripts.database_query_utility.models" />
-          <option value="Sources.comic.comicreader.scripts.database_query_utility.constants" />
-          <option value="Sources.comic.comicreader.scripts.database_query_utility.Ebook" />
-          <option value="Sources.comic.comicreader.scripts.database_query_utility.Chapter" />
-          <option value="Sources.comic.comicreader.scripts.database_query_utility.IMAGE_STATUS_DOWNLOAD_FAILED" />
-          <option value="Sources.comic.comicreader.scripts.database_query_utility.IMAGE_STATUS_PENDING" />
-          <option value="Sources.comic.comicreader.scripts.database_query_utility.Image" />
-          <option value="Sources.comic.comicreader.scripts.database_query_utility.comicreader" />
+          <option value="Sources.comic.comicreader.scripts.crawl.Chapter" />
+          <option value="Sources.comic.comicreader.scripts.crawl.Image" />
         </list>
       </option>
     </inspection_tool>
