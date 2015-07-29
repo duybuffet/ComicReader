@@ -17,6 +17,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", env)
 
 from django.utils import timezone
 from comicreader.models import *
+from comicreader.constants import *
 
 
 def insert_categories(categories):
@@ -132,7 +133,7 @@ def insert_images(dict_images_chapter_id):
         chapter = Chapter.objects.get(pk=dict_images_chapter_id.get("chapter_id"))
         for image in dict_images_chapter_id.get("images"):
             image.chapter = chapter
-            image.status = 0
+            image.status = IMAGE_STATUS_PENDING
             image.save()
     except Exception as inst:
         logging.error(type(inst))
@@ -141,18 +142,50 @@ def insert_images(dict_images_chapter_id):
     logging.info("End function insert_images()")
     return 1
 
+
+def update_image(image):
+    """
+    Update images real_path and base on real_path, update its status
+    :param: image - image will be updated
+    :return: 1 if success
+             0 otherwise
+    """
+    logging.info("Start function update_image()")
+    try:
+        logging.debug("Image.object.filter(url=image.url) : %s" %Image.objects.filter(url=image.url))
+        if Image.objects.filter(url=image.url):
+            image_update = Image.objects.filter(url=image.url)[0]
+            logging.debug("image_update : %s"%Image.objects.filter(url=image.url)[0])
+            logging.debug("image_update real_path : %s"%Image.objects.filter(url=image.url)[0].real_path)
+            print image_update.real_path
+            image_update.real_path = image.real_path
+            if image.real_path.strip() == '':
+                image_update.status = IMAGE_STATUS_DOWNLOAD_FAILED
+            else:
+                image_update.status = IMAGE_STATUS_DOWNLOAD_SUCCESS
+            image_update.save()
+            return 1
+        else:
+            return 0
+    except Exception as inst:
+        logging.error(type(inst))
+        logging.error(inst)
+        return 0
+    logging.info("End function update_image()")
+    return 1
 """ TEST DATA """
 # chapter = Chapter(name="def",url="xyz")
 # chapter2 = Chapter(name="def",url="xyz322323")
 # insert_chapters({"ebook_id":1, "chapters":[chapter, chapter2]})
 
-# image = Image(url="aaa",name="bbb")
+# image = Image(url="http://i.imgur.com/Fdtoup6.jpg?imgmax=3000",real_path="")
 # insert_images({"chapter_id":3,"images":[image]})
 # cat = Category(name='cat3', description='aloxo')
 # cat2 = Category(name='cat4', description='aloxo')
 # insert_categories([cat, cat2])
 #
-ebook = Ebook(id=1  , cover='test',name='yugioh', url='https://blogtruyen.com/yugioh',totalchap=169)
+# ebook = Ebook(id=1  , cover='test',name='yugioh', url='https://blogtruyen.com/yugioh',totalchap=169)
 #insert_ebooks([ebook])
 
-print update_ebook_and_add_bookcat({"ebook" : ebook,"categories" : ['16+','18+']})
+# print update_ebook_and_add_bookcat({"ebook" : ebook,"categories" : ['16+','18+']})
+# print update_image(image)
