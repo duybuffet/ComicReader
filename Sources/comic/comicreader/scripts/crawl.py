@@ -5,6 +5,7 @@ import urllib2
 from bs4 import BeautifulSoup
 import os
 import sys
+import datetime
 
 parentdir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, parentdir)
@@ -142,7 +143,9 @@ def crawlInforEbook(ebook):
             if pNull.findAll('span')[0]['class'][0]=='category':
                 spancategorys = pNull.findAll('span')
                 for element in spancategorys:
-                    categories.append(element.text)
+                    categories.append(str(element.text))
+                    #print categories
+
         except:
             pass
     ebook = Ebook()
@@ -154,6 +157,7 @@ def crawlInforEbook(ebook):
     ebook.update = datetime.datetime.strptime(update,'%d/%m/%Y %H:%M')
     ebook.complete = complete
     result = {'ebook':ebook,'categories':categories}
+    print categories
     print "end crawlInforEbook()"
     return  result
 

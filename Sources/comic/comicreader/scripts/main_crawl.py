@@ -16,10 +16,13 @@ application = get_wsgi_application()
 
 from crawl import *
 from database_utility import *
+from database_query_utility import *
 
 
 if __name__ == '__main__':
     # insert_categories(crawlCategory())
-    insert_ebooks(crawlAllEbook())
-
+    #insert_ebooks(crawlAllEbook())
+    #print update_ebook_and_add_bookcat(crawlInforEbook(getEbooksId(3)[0]))
+    for i in range(100, 501):
+         print insert_images(crawImagesOfChapter(getChapterById(i)[0]))
     #pass

@@ -29,6 +29,25 @@ def getEbooks():
         listEbook.append(eb)
     return listEbook
 
+def getEbooksId(ebook_id):
+    """
+    Lay thong tin tu CSDL de lam input cho viec crawl chapter
+    :return: list object ebook
+    """
+    listEbook = []
+    sql= 'SELECT id, url FROM ebook WHERE id=%s'%ebook_id
+    for eb in Ebook.objects.raw(sql):
+        print eb.url
+        listEbook.append(eb)
+    return listEbook
+
+def getChapterById(chapter_id):
+    sql= 'SELECT id, url FROM chapter WHERE id=%s'%chapter_id
+    listChap = []
+    for chap in Chapter.objects.raw(sql):
+        listChap.append(chap)
+    return listChap
+
 def getChapters():
     """
     Lay thong tin tu CSDL de lam input cho viec crawl image
@@ -52,6 +71,4 @@ def getImageUrls():
     return images
 
 if __name__ == '__main__':
-    getEbooks()
-    getChapters()
-    getImageUrls()
+   print  getChapterById(1)[0].id
