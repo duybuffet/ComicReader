@@ -66,7 +66,16 @@ def update_ebook_and_add_bookcat(dict_ebook_cats):
     :return: 1 if success
              0 otherwise
     """
-    print dict_ebook_cats['ebook'].cover
+    eb = dict_ebook_cats['ebook']
+    print eb.id
+    print eb.url
+    print eb.name
+    print eb.description
+    print eb.complete
+    print eb.update
+    print eb.cover
+    for cat in dict_ebook_cats['categories']:
+        print cat
     logging.info("Start function update_ebook_and_add_bookcat()")
     try:
         logging.debug("dict_ebook_cats : %s"  %dict_ebook_cats)
@@ -141,6 +150,7 @@ def insert_images(dict_images_chapter_id):
     logging.info("End function insert_images()")
     return 1
 
+
 """ TEST DATA """
 # chapter = Chapter(name="def",url="xyz")
 # chapter2 = Chapter(name="def",url="xyz322323")
@@ -152,7 +162,6 @@ def insert_images(dict_images_chapter_id):
 # cat2 = Category(name='cat4', description='aloxo')
 # insert_categories([cat, cat2])
 #
-ebook = Ebook(id=1  , cover='test',name='yugioh', url='https://blogtruyen.com/yugioh',totalchap=169)
+#ebook = Ebook(id=1  , cover='test',name='yugioh', url='https://blogtruyen.com/yugioh',totalchap=169)
 #insert_ebooks([ebook])
-
-print update_ebook_and_add_bookcat({"ebook" : ebook,"categories" : ['16+','18+']})
+#print update_ebook_and_add_bookcat({"ebook" : ebook,"categories" : ['16+','18+']})

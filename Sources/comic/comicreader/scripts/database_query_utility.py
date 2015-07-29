@@ -59,16 +59,27 @@ def getChapters():
         listChap.append(chap)
     return listChap
 
-def getImageUrls():
+def getImageUrls(image_id):
+    """
+    Lay thong tin tu CSDL de thuc hien viec download image
+    :return: dictionary
+    """
+    #sql= 'SELECT a.id, a.name, b.id, b.name, c.id, c.name, c.url FROM ebook a, chapter b, image c WHERE a.id = b.ebook_id AND b.ebook_id = chapter_id;'
+    filters = Q(status__in=[IMAGE_STATUS_DOWNLOAD_FAILED, IMAGE_STATUS_PENDING],
+                id= image_id)
+    images = Image.objects.filter(filters).values("id","url", "name", "chapter__name", "chapter_id", "chapter__ebook__id", "chapter__ebook__name")
+    return images
+
+def getAllImageUrls():
     """
     Lay thong tin tu CSDL de thuc hien viec download image
     :return: dictionary
     """
     #sql= 'SELECT a.id, a.name, b.id, b.name, c.id, c.name, c.url FROM ebook a, chapter b, image c WHERE a.id = b.ebook_id AND b.ebook_id = chapter_id;'
     filters = Q(status__in=[IMAGE_STATUS_DOWNLOAD_FAILED, IMAGE_STATUS_PENDING])
-    images = Image.objects.filter(filters).values("url", "name", "chapter__name", "chapter_id", "chapter__ebook__id", "chapter__ebook__name")
-    print images
+    images = Image.objects.filter(filters).values("id","url", "name", "chapter__name", "chapter_id", "chapter__ebook__id", "chapter__ebook__name")
     return images
 
 if __name__ == '__main__':
-   print  getChapterById(1)[0].id
+   images = getImageUrls(1)
+   print images[0]['chapter__name']

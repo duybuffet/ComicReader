@@ -123,19 +123,19 @@ def crawlInforEbook(ebook):
         #print pNull.text
         try:
             if pNull.findAll('a')[0]['class'][0]=='color-green':
-                author = pNull.findAll('a')[0].text
+                author = str(pNull.findAll('a')[0].text)
         except:
             pass
 
         try:
             if pNull['class'][0]=='clear-fix':
-                update = pNull.findAll('span')[0].text
+                update = str(pNull.findAll('span')[0].text)
         except:
             pass
 
         try:
             if pNull.findAll('span')[1]['class'][0]=='color-red':
-                complete = pNull.findAll('span')[1].text
+                complete = str(pNull.findAll('span')[1].text)
         except:
             pass
 
@@ -148,15 +148,17 @@ def crawlInforEbook(ebook):
 
         except:
             pass
-    ebook = Ebook()
-    ebook.id = id
-    ebook.name = name
-    ebook.author = author
-    ebook.cover = cover
-    ebook.description = description
-    ebook.update = datetime.datetime.strptime(update,'%d/%m/%Y %H:%M')
-    ebook.complete = complete
-    result = {'ebook':ebook,'categories':categories}
+    ebook_out = Ebook()
+    ebook_out.id = ebook.id
+    ebook_out.url =ebook.url
+    ebook_out.name = name
+    ebook_out.author = author
+    ebook_out.cover = cover
+    ebook_out.description = description
+    ebook_out.update = datetime.datetime.strptime(update,'%d/%m/%Y %H:%M')
+    ebook_out.complete = 0
+    #print complete
+    result = {'ebook':ebook_out,'categories':categories}
     print categories
     print "end crawlInforEbook()"
     return  result
