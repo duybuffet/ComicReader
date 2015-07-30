@@ -20,14 +20,12 @@ from comicreader.models import *
 from database_utility import *
 from database_query_utility import *
 
-input ={'ebookname': 'Naruto', 'chapter_name': 'Naruto Chap 002_test', 'urlimg': '', 'nameimg': '' }
-
-
 def dirNameEbook(ebookname):
-
     """
-    :param ebookname:
-    :return:
+    Kiểm tra thư mục đã tồn tại hay không. Nếu chưa đã tồn tại thì tạo thư mục mới sau đó trả về đường dẫn tới thư mục đó.
+
+    :param ebookname:Tên thư mục
+    :return path: đường dẫn tới thư mục
     """
 
     path = os.path.join(settings.PATH_DATA_IMAGE, ebookname)
@@ -38,20 +36,18 @@ def dirNameEbook(ebookname):
         pass
     return  path
 
-def dirNameChapter(chaptername):
+def dirNameChapter(ebook_path,chaptername):
     """
     :param chaptername:
     :return:
     """
-    path =  os.path.join(dirNameEbook(input['ebookname']),chaptername)
+    path =  os.path.join(ebook_path,chaptername)
     if not os.path.exists(path):
         os.mkdir(path,0755)
     else:
         #print 'Folder %s exits' %chaptername
         pass
     return  path
-def dowloadImage(input):
-    pass
 
 def download_photo(path, img_url, filename):
     """
@@ -75,16 +71,14 @@ def download_photo(path, img_url, filename):
     image.real_path = file_path
     return image
 
-if __name__ == '__main__':
-    for i in range(1,2426):
 
+if __name__ == '__main__':
+    for i in range(1,1000):
         images = getImageUrls(i)
-        image = images[0]
-    # path = dirNameChapter(input['chaptername'])
-    # print path
-    # url = input['urlimg']
-    # image= input['nameimg']
-    # print len(url)
-    # print len(image)
-    # for i in xrange(len(url)):
-    #   print download_photo(path, url[i], image[i] )
+        if images:
+            image = images[0]
+            path = dirNameChapter(dirNameEbook(image['chapter__ebook__name']),image['chapter__name'])
+            file_name = str(image['id'])+'_'+ image['name']
+            update_image(download_photo(path,image['url'],file_name))
+        else:
+            pass

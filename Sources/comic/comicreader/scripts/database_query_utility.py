@@ -79,7 +79,3 @@ def getAllImageUrls():
     filters = Q(status__in=[IMAGE_STATUS_DOWNLOAD_FAILED, IMAGE_STATUS_PENDING])
     images = Image.objects.filter(filters).values("id","url", "name", "chapter__name", "chapter_id", "chapter__ebook__id", "chapter__ebook__name")
     return images
-
-if __name__ == '__main__':
-   images = getImageUrls(1)
-   print images[0]['chapter__name']
