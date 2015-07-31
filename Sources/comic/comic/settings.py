@@ -79,9 +79,9 @@ WSGI_APPLICATION = 'comic.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'comicreader',
+        'NAME': 'commicreader',
         'USER': 'root',
-        'PASSWORD' : '12345',
+        'PASSWORD' : 'h01629758773',
         'HOST' : 'localhost',
         'PORT' : '3306',
     }
@@ -107,4 +107,4 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 # Folder dowload images
-PATH_DATA_IMAGE='/home/sang/Projects/ComicReader/Downloads/images/'
+PATH_DATA_IMAGE='/home/zero/PycharmProjects/ComicReader/Downloads/images/'
