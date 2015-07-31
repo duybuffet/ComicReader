@@ -15,7 +15,9 @@ application = get_wsgi_application()
 
 from comicreader.models import *
 from comicreader.constants import *
-from django.db.models import Q
+from django.db.models import Q, F
+from django.db.models import Count
+from django.db.models.functions import *
 
 def getEbooks():
     """
@@ -31,7 +33,7 @@ def getEbookById(ebook_id):
     :return: list object ebook
     """
     filters = Q(id= ebook_id)
-    ebook = Ebook.objects.filter(filters).values("id","url")
+    ebook = Ebook.objects.filter(filters).values("id","url","name","cover","description","author")
     return ebook
 
 def getAllChapterEbook(ebook_id):
@@ -116,6 +118,19 @@ def insert_feedback(feedback):
         return 0
     return 1
 
+def getEbooksByCategoy(category):
+    """
+    search ebook by catergory
+    :param category:
+    :return: list object Ebook
+    """
+    filters = Q(name=category)
+    categorys = Category.objects.filter(filters).values('id')
+    print categorys[0]['id']
+    filters = Q(category_id=categorys[0]['id'])
+    ebooks = Bookcat.objects.filter(filters).values('ebook__id','ebook__name','ebook__cover','ebook__update')
+    return ebooks
+
 
 
 # ------------------------------bat dau Hieu viet method-----------------------------------
@@ -129,55 +144,30 @@ def getEbooksNew():
 #------------------------------------------------------------------
 
 
-
-def getEbooksByCategoy(category):
-    """
-    search ebook by catergory
-    :param category:
-    :return: list object Ebook
-    """
-
-    # listEbook = []
-    # sql = 'SELECT id FROM category WHERE name="%s"'%category
-    # id = ''
-    # for idcatrgory in Category.objects.raw(sql):
-    #     id = idcatrgory.id
-    # sql ='SELECT ebook.id, ebook.name, ebook.url, ebook.cover, ebook.description, ebook.author FROM ebook, bookcat WHERE ebook.id=ebook_id AND category_id=%s'%id
-    # for eb in Ebook.objects.raw(sql):
-    #     listEbook.append(eb)
-
-    filters = Q(name=category)
-    category = Category.objects.filter(filters).values("id")
-    print category[0]['id']
-    return category
-
-getEbooksByCategoy("18+")
-
 def getEbooksByView():
     """
     search ebook by views
     :return:list object Ebook
     """
-    listEbook = []
-    sql = 'SELECT id, ebook_id FROM view_count ORDER BY num_view'
-    for view in ViewCount.objects.raw(sql):
-        listEbook.append(getEbooksId(view.ebook_id)[0])
-        if len(listEbook)>API_LIMIT_ELEMENT_SEARCH:
-            return listEbook
-    return listEbook
+    filters = Q()
+    ebooks = ViewCount.objects.filter(filters).order_by('num_view').values('ebook__id','ebook__name','ebook__cover','ebook__update')
+    return ebooks
+
 
 def getEbooksByFavorite():
     """
     search ebook by favorite
     :return: list object Ebook
     """
-    listEbook = []
-    sql = 'SELECT id, ebook_id, COUNT(device_id) AS count_device FROM favorite GROUP BY  ebook_id ORDER BY count_device desc'
-    for favorite in Favorite.objects.raw(sql):
-        listEbook.append(getEbooksId(favorite.id)[0])
-        if len(listEbook)>API_LIMIT_ELEMENT_SEARCH:
-            return listEbook
-    return listEbook
+    filters = Q()
+    ebooks = Favorite.objects.filter(filters)\
+        .values('ebook_id')\
+        .annotate(count_device=Count('device_id'))\
+        .order_by(Value('count_device').asc())\
+        .values('ebook__name','ebook__cover','ebook__update','ebook__id')
+    for e in ebooks:
+        print e
+    return ebooks
 
 def getEbooksByNameAuthor(nameAuthor):
     """
@@ -185,11 +175,14 @@ def getEbooksByNameAuthor(nameAuthor):
     :param nameauthor: name author
     :return:list object Ebook
     """
-    listEbook = []
-    sql = 'SELECT id, url FROM ebook WHERE author LIKE "%s"'%('%'+nameAuthor+'%')
-    for ebook in Ebook.objects.raw(sql):
-        listEbook.append(ebook)
-    return listEbook
+    # listEbook = []
+    # sql = 'SELECT id, url FROM ebook WHERE author LIKE "%s"'%('%'+nameAuthor+'%')
+    # for ebook in Ebook.objects.raw(sql):
+    #     listEbook.append(ebook)
+    # return listEbook
+    headline__contains='Lennon'
+    filters = Q(author__contains=nameAuthor)
+    ebooks = Author.objects.filter(filters).values('ebook__id','ebook__name','ebook__cover','ebook__update')
 
 def getEbookByNameEbook(nameEbook):
     """
@@ -205,3 +198,7 @@ def getEbookByNameEbook(nameEbook):
 
 
 #----------------------------------ket thuc Hieu viet method----------------------------------------------
+
+if __name__ == '__main__':
+    getEbooksByFavorite()
+    #getEbooksByNameAuthor("e")

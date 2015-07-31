@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 import json
-import models
+from comicreader.models import *
 from scripts import database_query_utility
 from comicreader.constants import *
 # Create your views here.
@@ -12,11 +12,9 @@ def index(request):
 def getebook(request):
     ebook_id = request.REQUEST.get('ebook_id')
     if request.method =='GET':
-        id = int(ebook_id)
-        ebooks = database_query_utility.getEbooksId(id)
-        if len(ebooks)>0:
-            name = ebooks[0].name
-            data = {'ebook_id': ebooks[0].id, 'ebook':{'id': ebooks[0].id,'name': ebooks[0].name,'cover': ebooks[0].cover, 'description': ebooks[0].description,'author': ebooks[0].author}}
+        ebook = database_query_utility.getEbookById(ebook_id)
+        if len(ebook)>0:
+            data = {'ebook_id': ebook[0]['id'], 'ebook':{'id': ebook[0]['id'], 'name': ebook[0]['name'], 'cover': ebook[0]['cover'], 'description': ebook[0]['description'],'author': ebook[0]['author']}}
             data_json = json.dumps(data)
             return HttpResponse(data_json, content_type='application/json', status=200)
         else:
@@ -44,16 +42,26 @@ def listEbooks(request):
             for i in range(totalEbook-6, totalEbook-1):
                 listEbook.append(listAllEbook[i])
         elif type == API_KEYWORD_TYPE_CATEGORY:
-            listEbook = database_query_utility.getEbooksByCategoy(key_word)
+            Ebooks = database_query_utility.getEbooksByCategoy(key_word)
+            for ebook in Ebooks:
+                listEbook.append(ebook)
         elif type == API_KEYWORD_TYPE_READ_MOST:
-            listEbook = database_query_utility.getEbooksByView()
+            Ebooks = database_query_utility.getEbooksByView()
+            for ebook in Ebooks:
+                listEbook.append(ebook)
         elif type == API_KEYWORD_TYPE_FAVORITE:
-            listEbook = database_query_utility.getEbooksByFavorite()
+            Ebooks = database_query_utility.getEbooksByFavorite()
+            for ebook in Ebooks:
+                listEbook.append(ebook)
         elif type == API_KEYWORD_TYPE_SEARCH:
             if search_type == API_KEYWORD_SEARCH_TYPE_AUTHOR:
-                listEbook = database_query_utility.getEbooksByNameAuthor(key_word)
+                Ebooks = database_query_utility.getEbooksByNameAuthor(key_word)
+                for ebook in Ebooks:
+                    listEbook.append(ebook)
             elif search_type == API_KEYWORD_SEARCH_TYPE_EBOOK:
-                listEbook = database_query_utility.getEbookByNameEbook(key_word)
+                Ebooks = database_query_utility.getEbookByNameEbook(key_word)
+                for ebook in Ebooks:
+                    listEbook.append(ebook)
             else:
                 pass
         else:
@@ -111,3 +119,22 @@ def feedback(request):
         response_data['error'] = 'Request error!'
         response = HttpResponse(json.dumps(response_data), content_type="application/json", status=404)
         return response
+
+
+def listChapter(request):
+    ebook_id = request.REQUEST.get('ebook_id')
+    if request.method =='GET':
+        id = int(ebook_id)
+        chapters = database_query_utility.getAllChapterEbook(id)
+        if len(chapters)>0:
+                data = []
+                for idx in range(len(chapters)):
+                    data.append({'ebook_id': ebook_id, 'chapters':{'chapter_id': chapters[idx]['id'],'name': chapters[idx]['name']}})
+                    data_json = json.dumps(data)
+                return HttpResponse(data_json, content_type='application/json', status=200)
+        else:
+            data = {'error': 'Data not found'}
+            data_json = json.dumps(data)
+            return HttpResponse(data_json, content_type='application/json', status=404)
+    else:
+        pass
