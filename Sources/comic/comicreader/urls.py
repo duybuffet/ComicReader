@@ -14,4 +14,5 @@ urlpatterns = [
     url(r'^chapter/$', views.get_chapter, name= 'Chapter_byID'),
     #url receive feedback from user
     url(r'^feedback/$', views.feedback, name= 'FeedBack'),
+    url(r'^image/$', views.get_image, name='GetImage'),
 ]

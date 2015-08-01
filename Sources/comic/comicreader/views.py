@@ -149,3 +149,40 @@ def listChapter(request):
             return HttpResponse(data_json, content_type='application/json', status=404)
     else:
         pass
+
+
+def get_image(request):
+    try:
+        mime_type = ""
+        flag = True
+        real_path = database_query_utility.get_image_path_by_id(request.REQUEST.get("image_id"))
+        if real_path:
+            mime_type = get_mime_type(real_path)
+        else:
+            flag = False
+    except:
+        flag = False
+
+    if flag:
+        return HttpResponse(open(real_path,'rb'), content_type=mime_type, status=200)
+    else:
+        data = {'error': 'Data not found'}
+        data_json = json.dumps(data)
+        return HttpResponse(data_json, content_type='application/json', status=404)
+
+
+def get_mime_type(real_path):
+    mime_type = ""
+    if real_path.endswith(".jpg") | real_path.endswith(".jpeg"):
+        mime_type = "image/jpeg"
+    elif real_path.endswith(".png"):
+        mime_type = "image/png"
+    elif real_path.endswith(".bm") | real_path.endswith(".bmp"):
+        mime_type = "image/bmp"
+    elif real_path.endswith(".gif"):
+        mime_type = "image/gif"
+    elif real_path.endswith(".ico"):
+        mime_type = "image/x-icon"
+    else:
+        mime_type = "application/force-download"
+    return mime_type

@@ -22,10 +22,10 @@ from database_query_utility import *
 
 def dirNameEbook(ebookname):
     """
-    Kiểm tra thư mục đã tồn tại hay không. Nếu chưa đã tồn tại thì tạo thư mục mới sau đó trả về đường dẫn tới thư mục đó.
 
-    :param ebookname:Tên thư mục
-    :return path: đường dẫn tới thư mục
+
+    :param ebookname:
+    :return path:
     """
 
     path = os.path.join(settings.PATH_DATA_IMAGE, ebookname)

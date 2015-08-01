@@ -1,6 +1,10 @@
 __author__ = 'phuong'
 import os
 import sys
+import logging
+
+# config logging
+logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
 parentdir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, parentdir)
 
@@ -96,11 +100,12 @@ def getAllImageUrls():
 
 def get_images_of_chapter(chapter_id):
     """
+    Change log : 1/8/2015 - Duy - Change from values('real_path') to values('id')
     :param chapter_id
     :return:
     """
     filters = Q(chapter_id=chapter_id)
-    images = Image.objects.filter(filters).values('real_path')
+    images = Image.objects.filter(filters).values('id') # old : values('real_path')
     return images
 
 def insert_feedback(feedback):
@@ -191,6 +196,25 @@ def getEbooksByNameEbook(nameEbook):
     return ebooks
 
 #----------------------------------ket thuc Hieu viet method----------------------------------------------
+
+def get_image_path_by_id(image_id):
+    """
+    Get real path of given image_id
+    :param image_id: id of image
+    :return:url of image
+    """
+    logging.info("Start function get_image_path_by_id()")
+    logging.debug("image_id : %s"%image_id)
+
+    path = ""
+    try:
+        path = Image.objects.filter(pk=image_id)[0].real_path
+    except Exception as inst:
+        logging.error(type(inst))
+        logging.error(inst)
+
+    logging.info("End function get_image_path_by_id()")
+    return path
 
 if __name__ == '__main__':
     pass
