@@ -32,40 +32,23 @@ def listEbooks(request):
     key_word = request.REQUEST.get('key_word')
     if request.method == 'GET':
         response_data = {}
-    #     "type": <type>
-    # "search_type": <search_type>
-    # "key_word": <key_word>
-    # "ebooks"    : [{id :<id_ebook>, cover : <cover>, name : <name>, update : <update>}]
-
         response_data['type'] = type
         response_data['search_type'] = search_type
         response_data['key_word'] = key_word
-        listEbook = []
+        ebooks = []
         if type == API_KEYWORD_TYPE_NEW:
-            Ebooks = database_query_utility.getEbooksNew()
-            for ebook in Ebooks:
-                listEbook.append(ebook)
+            ebooks = database_query_utility.getEbooksNew()
         elif type == API_KEYWORD_TYPE_CATEGORY:
-            Ebooks = database_query_utility.getEbooksByCategoy(key_word)
-            for ebook in Ebooks:
-                listEbook.append(ebook)
+            ebooks = database_query_utility.getEbooksByCategoy(key_word)
         elif type == API_KEYWORD_TYPE_READ_MOST:
-            Ebooks = database_query_utility.getEbooksByView()
-            for ebook in Ebooks:
-                listEbook.append(ebook)
+            ebooks = database_query_utility.getEbooksByView()
         elif type == API_KEYWORD_TYPE_FAVORITE:
-            Ebooks = database_query_utility.getEbooksByFavorite()
-            for ebook in Ebooks:
-                listEbook.append(ebook)
+            ebooks = database_query_utility.getEbooksByFavorite()
         elif type == API_KEYWORD_TYPE_SEARCH:
             if search_type == API_KEYWORD_SEARCH_TYPE_AUTHOR:
-                Ebooks = database_query_utility.getEbooksByNameAuthor(key_word)
-                for ebook in Ebooks:
-                    listEbook.append(ebook)
+                ebooks = database_query_utility.getEbooksByNameAuthor(key_word)
             elif search_type == API_KEYWORD_SEARCH_TYPE_EBOOK:
-                Ebooks = database_query_utility.getEbookByNameEbook(key_word)
-                for ebook in Ebooks:
-                    listEbook.append(ebook)
+                ebooks = database_query_utility.getEbooksByNameEbook(key_word)
             else:
                 data = {'error': 'Data not found'}
                 data_json = json.dumps(data)
@@ -74,7 +57,8 @@ def listEbooks(request):
             data = {'error': 'Data not found'}
             data_json = json.dumps(data)
             return HttpResponse(data_json, content_type='application/json', status=404)
-        response_data['ebooks'] = listEbook
+
+        response_data['ebooks'] = ebooks
         response = HttpResponse(json.dumps(response_data), content_type="application/json", status=200)
         return  response
     else:

@@ -130,7 +130,11 @@ def getEbooksNew():
     """
     filters = Q()
     ebooks = Ebook.objects.filter(filters).order_by('update').reverse().values('id','name','cover','update')[:API_LIMIT_ELEMENT_SEARCH]
-    return ebooks
+    listEbook = []
+    for ebook in ebooks:
+        data = {'id' :ebook['id'], 'cover' : ebook['cover'], 'name' : ebook['name'], 'update' : str(ebook['update'])}
+        listEbook.append(data)
+    return listEbook
 
 
 def getEbooksByCategoy(category):
@@ -140,11 +144,12 @@ def getEbooksByCategoy(category):
     :return: list object Ebook
     """
     filters = Q(name=category)
-    categorys = Category.objects.filter(filters).values('id')
-    print categorys[0]['id']
-    filters = Q(category_id=categorys[0]['id'])
-    ebooks = Bookcat.objects.filter(filters).values('ebook__id','ebook__name','ebook__cover','ebook__update')
-    return ebooks
+    ebooks = Category.objects.filter(filters).values('bookcat__ebook__id','bookcat__ebook__name','bookcat__ebook__cover','bookcat__ebook__update')
+    listEbook = []
+    for ebook in ebooks:
+        data = {'id' :ebook['bookcat__ebook__id'], 'cover' : ebook['bookcat__ebook__cover'], 'name' : ebook['bookcat__ebook__name'], 'update' : str(ebook['bookcat__ebook__update'])}
+        listEbook.append(data)
+    return listEbook
 
 def getEbooksByView():
     """
@@ -153,7 +158,11 @@ def getEbooksByView():
     """
     filters = Q()
     ebooks = ViewCount.objects.filter(filters).order_by('num_view').values('ebook__id','ebook__name','ebook__cover','ebook__update')
-    return ebooks
+    listEbook = []
+    for ebook in ebooks:
+        data = {'id' :ebook['ebook__id'], 'cover' : ebook['ebook__cover'], 'name' : ebook['ebook__name'], 'update' : str(ebook['ebook__update'])}
+        listEbook.append(data)
+    return listEbook
 
 
 def getEbooksByFavorite():
@@ -167,7 +176,11 @@ def getEbooksByFavorite():
         .annotate(count_device=Count('device_id'))\
         .order_by('count_device').reverse()\
         .values('ebook__name','ebook__cover','ebook__update','ebook__id')
-    return ebooks
+    listEbook = []
+    for ebook in ebooks:
+        data = {'id' :ebook['ebook__id'], 'cover' : ebook['ebook__cover'], 'name' : ebook['ebook__name'], 'update' : str(ebook['ebook__update'])}
+        listEbook.append(data)
+    return listEbook
 
 def getEbooksByNameAuthor(nameAuthor):
     """
@@ -177,7 +190,12 @@ def getEbooksByNameAuthor(nameAuthor):
     """
     filters = Q(author__contains=nameAuthor)
     ebooks = Ebook.objects.filter(filters).values('id','name','cover','update')
-    return ebooks
+    listEbook = []
+    for ebook in ebooks:
+        data = {'id' :ebook['id'], 'cover' : ebook['cover'], 'name' : ebook['name'], 'update' : str(ebook['update'])}
+        listEbook.append(data)
+    return listEbook
+
 
 
 def getEbooksByNameEbook(nameEbook):
@@ -188,7 +206,12 @@ def getEbooksByNameEbook(nameEbook):
     """
     filters = Q(name__contains=nameEbook)
     ebooks = Ebook.objects.filter(filters).values('id','name','cover','update')
-    return ebooks
+    listEbook = []
+    for ebook in ebooks:
+        data = {'id' :ebook['id'], 'cover' : ebook['cover'], 'name' : ebook['name'], 'update' : str(ebook['update'])}
+        listEbook.append(data)
+    return listEbook
+
 
 #----------------------------------ket thuc Hieu viet method----------------------------------------------
 
