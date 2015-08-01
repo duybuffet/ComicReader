@@ -118,6 +118,21 @@ def insert_feedback(feedback):
         return 0
     return 1
 
+
+
+
+
+# ------------------------------bat dau Hieu viet method-----------------------------------
+def getEbooksNew():
+    """
+    search ebook new limit 10
+    :return: list object Ebook
+    """
+    filters = Q()
+    ebooks = Ebook.objects.filter(filters).order_by('update').reverse().values('id','name','cover','update')[:API_LIMIT_ELEMENT_SEARCH]
+    return ebooks
+
+
 def getEbooksByCategoy(category):
     """
     search ebook by catergory
@@ -130,19 +145,6 @@ def getEbooksByCategoy(category):
     filters = Q(category_id=categorys[0]['id'])
     ebooks = Bookcat.objects.filter(filters).values('ebook__id','ebook__name','ebook__cover','ebook__update')
     return ebooks
-
-
-
-# ------------------------------bat dau Hieu viet method-----------------------------------
-def getEbooksNew():
-    """
-    search ebook new
-    :return: list object Ebook
-    """
-    listEbook = []
-    sql = 'SELECT id, url FROM ebook ORDER BY update'
-#------------------------------------------------------------------
-
 
 def getEbooksByView():
     """
@@ -163,10 +165,8 @@ def getEbooksByFavorite():
     ebooks = Favorite.objects.filter(filters)\
         .values('ebook_id')\
         .annotate(count_device=Count('device_id'))\
-        .order_by(Value('count_device').asc())\
+        .order_by('count_device').reverse()\
         .values('ebook__name','ebook__cover','ebook__update','ebook__id')
-    for e in ebooks:
-        print e
     return ebooks
 
 def getEbooksByNameAuthor(nameAuthor):
@@ -175,30 +175,22 @@ def getEbooksByNameAuthor(nameAuthor):
     :param nameauthor: name author
     :return:list object Ebook
     """
-    # listEbook = []
-    # sql = 'SELECT id, url FROM ebook WHERE author LIKE "%s"'%('%'+nameAuthor+'%')
-    # for ebook in Ebook.objects.raw(sql):
-    #     listEbook.append(ebook)
-    # return listEbook
-    headline__contains='Lennon'
     filters = Q(author__contains=nameAuthor)
-    ebooks = Author.objects.filter(filters).values('ebook__id','ebook__name','ebook__cover','ebook__update')
+    ebooks = Ebook.objects.filter(filters).values('id','name','cover','update')
+    return ebooks
 
-def getEbookByNameEbook(nameEbook):
+
+def getEbooksByNameEbook(nameEbook):
     """
     search ebook by name ebook
     :param nameauthor: name ebook
     :return:list object Ebook
     """
-    listEbook = []
-    sql = 'SELECT id, url FROM ebook WHERE ebook.name LIKE "%s"'%('%'+nameEbook+'%')
-    for ebook in Ebook.objects.raw(sql):
-        listEbook.append(ebook)
-    return listEbook
-
+    filters = Q(name__contains=nameEbook)
+    ebooks = Ebook.objects.filter(filters).values('id','name','cover','update')
+    return ebooks
 
 #----------------------------------ket thuc Hieu viet method----------------------------------------------
 
 if __name__ == '__main__':
-    getEbooksByFavorite()
-    #getEbooksByNameAuthor("e")
+    pass

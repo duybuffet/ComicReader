@@ -32,15 +32,19 @@ def listEbooks(request):
     key_word = request.REQUEST.get('key_word')
     if request.method == 'GET':
         response_data = {}
-        response_data['result'] = 'failed'
-        response_data['message'] = 'You messed up'
+    #     "type": <type>
+    # "search_type": <search_type>
+    # "key_word": <key_word>
+    # "ebooks"    : [{id :<id_ebook>, cover : <cover>, name : <name>, update : <update>}]
+
+        response_data['type'] = type
+        response_data['search_type'] = search_type
+        response_data['key_word'] = key_word
         listEbook = []
         if type == API_KEYWORD_TYPE_NEW:
-            # false
-            listAllEbook = database_query_utility.getEbooks()
-            totalEbook = len(listAllEbook)
-            for i in range(totalEbook-6, totalEbook-1):
-                listEbook.append(listAllEbook[i])
+            Ebooks = database_query_utility.getEbooksNew()
+            for ebook in Ebooks:
+                listEbook.append(ebook)
         elif type == API_KEYWORD_TYPE_CATEGORY:
             Ebooks = database_query_utility.getEbooksByCategoy(key_word)
             for ebook in Ebooks:
@@ -63,13 +67,20 @@ def listEbooks(request):
                 for ebook in Ebooks:
                     listEbook.append(ebook)
             else:
-                pass
+                data = {'error': 'Data not found'}
+                data_json = json.dumps(data)
+                return HttpResponse(data_json, content_type='application/json', status=404)
         else:
-            pass
+            data = {'error': 'Data not found'}
+            data_json = json.dumps(data)
+            return HttpResponse(data_json, content_type='application/json', status=404)
+        response_data['ebooks'] = listEbook
         response = HttpResponse(json.dumps(response_data), content_type="application/json", status=200)
         return  response
     else:
-        pass
+        data = {'error': 'Data not found'}
+        data_json = json.dumps(data)
+        return HttpResponse(data_json, content_type='application/json', status=404)
 
 
 
