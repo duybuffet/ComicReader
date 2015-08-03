@@ -128,17 +128,33 @@ def insert_feedback(feedback):
 
 
 # ------------------------------bat dau Hieu viet method-----------------------------------
+
+def getEbooksBy18():
+    """
+    search ebook 18+
+    :return: list id of ebook 18+
+    """
+    filters = Q(name__in=API_BLOCK_CATEGORY)
+    ebooks = Category.objects.filter(filters).values('bookcat__ebook__id')
+    listEbook = []
+    for ebook in ebooks:
+        listEbook.append(ebook['bookcat__ebook__id'])
+    return listEbook
 def getEbooksNew():
     """
     search ebook new limit 10
     :return: list object Ebook
     """
+    listEbook18 = getEbooksBy18()
     filters = Q()
     ebooks = Ebook.objects.filter(filters).order_by('update').reverse().values('id','name','cover','update')[:API_LIMIT_ELEMENT_SEARCH]
     listEbook = []
     for ebook in ebooks:
-        data = {'id' :ebook['id'], 'cover' : ebook['cover'], 'name' : ebook['name'], 'update' : str(ebook['update'])}
-        listEbook.append(data)
+        if ebook['id'] in listEbook18:
+            pass
+        else:
+            data = {'id' :ebook['id'], 'cover' : ebook['cover'], 'name' : ebook['name'], 'update' : str(ebook['update'])}
+            listEbook.append(data)
     return listEbook
 
 
@@ -148,12 +164,16 @@ def getEbooksByCategoy(category):
     :param category:
     :return: list object Ebook
     """
+    listEbook18 = getEbooksBy18()
     filters = Q(name=category)
     ebooks = Category.objects.filter(filters).values('bookcat__ebook__id','bookcat__ebook__name','bookcat__ebook__cover','bookcat__ebook__update')
     listEbook = []
     for ebook in ebooks:
-        data = {'id' :ebook['bookcat__ebook__id'], 'cover' : ebook['bookcat__ebook__cover'], 'name' : ebook['bookcat__ebook__name'], 'update' : str(ebook['bookcat__ebook__update'])}
-        listEbook.append(data)
+        if ebook['bookcat__ebook__id'] in listEbook18:
+            pass
+        else:
+            data = {'id' :ebook['bookcat__ebook__id'], 'cover' : ebook['bookcat__ebook__cover'], 'name' : ebook['bookcat__ebook__name'], 'update' : str(ebook['bookcat__ebook__update'])}
+            listEbook.append(data)
     return listEbook
 
 def getEbooksByView():
@@ -161,12 +181,16 @@ def getEbooksByView():
     search ebook by views
     :return:list object Ebook
     """
+    listEbook18 = getEbooksBy18()
     filters = Q()
     ebooks = ViewCount.objects.filter(filters).order_by('num_view').values('ebook__id','ebook__name','ebook__cover','ebook__update')
     listEbook = []
     for ebook in ebooks:
-        data = {'id' :ebook['ebook__id'], 'cover' : ebook['ebook__cover'], 'name' : ebook['ebook__name'], 'update' : str(ebook['ebook__update'])}
-        listEbook.append(data)
+        if ebook['ebook__id'] in listEbook18:
+            pass
+        else:
+            data = {'id' :ebook['ebook__id'], 'cover' : ebook['ebook__cover'], 'name' : ebook['ebook__name'], 'update' : str(ebook['ebook__update'])}
+            listEbook.append(data)
     return listEbook
 
 
@@ -175,6 +199,7 @@ def getEbooksByFavorite():
     search ebook by favorite
     :return: list object Ebook
     """
+    listEbook18 = getEbooksBy18()
     filters = Q()
     ebooks = Favorite.objects.filter(filters)\
         .values('ebook_id')\
@@ -183,8 +208,11 @@ def getEbooksByFavorite():
         .values('ebook__name','ebook__cover','ebook__update','ebook__id')
     listEbook = []
     for ebook in ebooks:
-        data = {'id' :ebook['ebook__id'], 'cover' : ebook['ebook__cover'], 'name' : ebook['ebook__name'], 'update' : str(ebook['ebook__update'])}
-        listEbook.append(data)
+        if ebook['ebook__id'] in listEbook18:
+            pass
+        else:
+            data = {'id' :ebook['ebook__id'], 'cover' : ebook['ebook__cover'], 'name' : ebook['ebook__name'], 'update' : str(ebook['ebook__update'])}
+            listEbook.append(data)
     return listEbook
 
 def getEbooksByNameAuthor(nameAuthor):
@@ -193,12 +221,16 @@ def getEbooksByNameAuthor(nameAuthor):
     :param nameauthor: name author
     :return:list object Ebook
     """
+    listEbook18 = getEbooksBy18()
     filters = Q(author__contains=nameAuthor)
     ebooks = Ebook.objects.filter(filters).values('id','name','cover','update')
     listEbook = []
     for ebook in ebooks:
-        data = {'id' :ebook['id'], 'cover' : ebook['cover'], 'name' : ebook['name'], 'update' : str(ebook['update'])}
-        listEbook.append(data)
+        if ebook['id'] in listEbook18:
+            pass
+        else:
+            data = {'id' :ebook['id'], 'cover' : ebook['cover'], 'name' : ebook['name'], 'update' : str(ebook['update'])}
+            listEbook.append(data)
     return listEbook
 
 
@@ -209,12 +241,16 @@ def getEbooksByNameEbook(nameEbook):
     :param nameauthor: name ebook
     :return:list object Ebook
     """
+    listEbook18 = getEbooksBy18()
     filters = Q(name__contains=nameEbook)
     ebooks = Ebook.objects.filter(filters).values('id','name','cover','update')
     listEbook = []
     for ebook in ebooks:
-        data = {'id' :ebook['id'], 'cover' : ebook['cover'], 'name' : ebook['name'], 'update' : str(ebook['update'])}
-        listEbook.append(data)
+        if ebook['id'] in listEbook18:
+            pass
+        else:
+            data = {'id' :ebook['id'], 'cover' : ebook['cover'], 'name' : ebook['name'], 'update' : str(ebook['update'])}
+            listEbook.append(data)
     return listEbook
 
 

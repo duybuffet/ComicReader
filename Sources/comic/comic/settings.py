@@ -79,9 +79,9 @@ WSGI_APPLICATION = 'comic.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'comicreader',
+        'NAME': 'commicreader',
         'USER': 'root',
-        'PASSWORD' : '123456',
+        'PASSWORD' : 'h01629758773',
         'HOST' : 'localhost',
         'PORT' : '3306',
     }

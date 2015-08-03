@@ -24,7 +24,6 @@ def getebook(request):
     else:
         pass
 
-#--------------dang sua--------------
 
 def listEbooks(request):
     type = request.REQUEST.get('type')
