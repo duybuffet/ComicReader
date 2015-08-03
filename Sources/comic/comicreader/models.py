@@ -13,9 +13,9 @@ from django.db import models
 
 
 class AccessHistory(models.Model):
-    device = models.ForeignKey('Device')
     date_request = models.DateTimeField(blank=True, null=True)
     num_request = models.IntegerField(blank=True, null=True)
+    device = models.ForeignKey('Device')
 
     class Meta:
         managed = False
@@ -54,6 +54,7 @@ class Chapter(models.Model):
 
 
 class Device(models.Model):
+    id = models.CharField(primary_key=True, max_length=255)
     last_date = models.DateTimeField()
     block = models.IntegerField()
 
@@ -88,13 +89,13 @@ class Favorite(models.Model):
 
 
 class Feedback(models.Model):
-    device = models.ForeignKey(Device, blank=True, null=True)
     title = models.TextField(blank=True, null=True)
     send_date = models.DateField(blank=True, null=True)
     status = models.IntegerField(blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     chapter = models.ForeignKey(Chapter, blank=True, null=True)
     ebook = models.ForeignKey(Ebook, blank=True, null=True)
+    device = models.ForeignKey(Device)
 
     class Meta:
         managed = False
