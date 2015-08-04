@@ -185,3 +185,16 @@ def get_mime_type(real_path):
     else:
         mime_type = "application/force-download"
     return mime_type
+
+def get_ebooks_by_category(request):
+    category_id = request.GET.get("category_id")
+    data = database_query_utility.get_ebooks_by_cat(category_id)
+    # print data
+    if len(data)>0:
+        data_json = json.dumps(data)
+        return HttpResponse(data_json, content_type='application/json', status=200)
+    else:
+        data = {'error': 'Data not found'}
+        data_json = json.dumps(data)
+        return HttpResponse(data_json, content_type='application/json', status=404)
+        pass

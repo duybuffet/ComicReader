@@ -313,5 +313,26 @@ def get_image_path_by_id(image_id):
     logging.info("End function get_image_path_by_id()")
     return path
 
+def get_ebooks_by_cat(cat_id):
+    """
+    Get list of ebooks that have category_id
+    :param category_id:
+    :return: list ebooks having category_id
+    """
+    result = []
+    logging.info("Start function get_ebooks_by_cat()")
+    try:
+        list_ebook_id = Bookcat.objects.filter(category_id=cat_id).values("ebook_id")
+        list_ebook = Ebook.objects.filter(pk__in = list_ebook_id)
+        for ebook in list_ebook:
+            result.append({'id' : ebook.id, 'name' : ebook.name, 'cover' : convertCover(ebook.cover), 'update' : convertDate(str(ebook.update))})
+        logging.info("End function get_ebooks_by_cat()")
+        return result
+    except Exception as inst:
+        logging.error(type(inst))
+        logging.error(inst)
+        return []
+
+
 if __name__ == '__main__':
     pass
