@@ -9,6 +9,7 @@ urlpatterns = [
     #/ebook?ebook_id=3
     url(r'^listebook', views.listEbooks, name='list-ebooks'),
     #/listebook?type=search&search_type=author&key_word=abc
+    url(r'^category', views.getCategory, name='get-ebooks'),
 
     #url get images of chapter by index
     url(r'^chapter/$', views.get_chapter, name= 'Chapter_byID'),

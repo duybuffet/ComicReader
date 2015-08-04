@@ -14,7 +14,7 @@ def getebook(request):
     if request.method =='GET':
         ebook = database_query_utility.getEbookById(ebook_id)
         if len(ebook)>0:
-            data = {'ebook_id': ebook[0]['id'], 'ebook':{'id': ebook[0]['id'], 'name': ebook[0]['name'], 'cover': ebook[0]['cover'], 'description': ebook[0]['description'],'author': ebook[0]['author']}}
+            data = {'ebook_id': ebook[0]['id'], 'ebook':{'id': ebook[0]['id'], 'name': ebook[0]['name'], 'cover': database_query_utility.convertCover(ebook[0]['cover']), 'description': ebook[0]['description'],'author': ebook[0]['author'],'update': database_query_utility.convertDate(str(ebook[0]['update']))}}
             data_json = json.dumps(data)
             return HttpResponse(data_json, content_type='application/json', status=200)
         else:
@@ -22,8 +22,24 @@ def getebook(request):
             data_json = json.dumps(data)
             return HttpResponse(data_json, content_type='application/json', status=404)
     else:
-        pass
+        data = {'error': 'Data not found'}
+        data_json = json.dumps(data)
+        return HttpResponse(data_json, content_type='application/json', status=404)
 
+def getCategory(request):
+    if request.method =='GET':
+        data = database_query_utility.getTotalEbookInCategory()
+        if len(data)>0:
+            data_json = json.dumps(data)
+            return HttpResponse(data_json, content_type='application/json', status=200)
+        else:
+            data = {'error': 'Data not found'}
+            data_json = json.dumps(data)
+            return HttpResponse(data_json, content_type='application/json', status=404)
+    else:
+        data = {'error': 'Data not found'}
+        data_json = json.dumps(data)
+        return HttpResponse(data_json, content_type='application/json', status=404)
 
 def listEbooks(request):
     type = request.REQUEST.get('type')

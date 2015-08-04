@@ -37,7 +37,7 @@ def getEbookById(ebook_id):
     :return: list object ebook
     """
     filters = Q(id= ebook_id)
-    ebook = Ebook.objects.filter(filters).values("id","url","name","cover","description","author")
+    ebook = Ebook.objects.filter(filters).values("id","url","name","cover","description","author","update")
     return ebook
 
 def getAllChapterEbook(ebook_id):
@@ -62,7 +62,6 @@ def getChapters():
     :return: list cac object chapter
     """
     chapters = Image.objects.filter().values("id","url")
-    print chapters
     return chapters
 
 def getChapters():
@@ -117,7 +116,6 @@ def insert_feedback(feedback):
     """
     try:
         feedback =  Feedback(chapter_id=feedback.id,ebook_id=feedback.ebook_id,title=feedback.title,description=feedback.description,send_date=datetime.datetime.now(),status=0)
-        print feedback
         feedback.save()
     except Exception as inst:
         return 0
@@ -153,10 +151,9 @@ def getEbooksNew():
         if ebook['id'] in listEbook18:
             pass
         else:
-            data = {'id' :ebook['id'], 'cover' : ebook['cover'], 'name' : ebook['name'], 'update' : str(ebook['update'])}
+            data = {'id' :ebook['id'], 'cover' : convertCover(ebook['cover']), 'name' : ebook['name'], 'update' : convertDate(str(ebook['update']))}
             listEbook.append(data)
     return listEbook
-
 
 def getEbooksByCategoy(category):
     """
@@ -172,7 +169,7 @@ def getEbooksByCategoy(category):
         if ebook['bookcat__ebook__id'] in listEbook18:
             pass
         else:
-            data = {'id' :ebook['bookcat__ebook__id'], 'cover' : ebook['bookcat__ebook__cover'], 'name' : ebook['bookcat__ebook__name'], 'update' : str(ebook['bookcat__ebook__update'])}
+            data = {'id' :ebook['bookcat__ebook__id'], 'cover' :  convertCover(ebook['bookcat__ebook__cover']), 'name' : ebook['bookcat__ebook__name'], 'update' : convertDate(str(ebook['bookcat__ebook__update']))}
             listEbook.append(data)
     return listEbook
 
@@ -189,7 +186,7 @@ def getEbooksByView():
         if ebook['ebook__id'] in listEbook18:
             pass
         else:
-            data = {'id' :ebook['ebook__id'], 'cover' : ebook['ebook__cover'], 'name' : ebook['ebook__name'], 'update' : str(ebook['ebook__update'])}
+            data = {'id' :ebook['ebook__id'], 'cover' :  convertCover(ebook['ebook__cover']), 'name' : ebook['ebook__name'], 'update' : convertDate(str(ebook['ebook__update']))}
             listEbook.append(data)
     return listEbook
 
@@ -211,7 +208,7 @@ def getEbooksByFavorite():
         if ebook['ebook__id'] in listEbook18:
             pass
         else:
-            data = {'id' :ebook['ebook__id'], 'cover' : ebook['ebook__cover'], 'name' : ebook['ebook__name'], 'update' : str(ebook['ebook__update'])}
+            data = {'id' :ebook['ebook__id'], 'cover' :  convertCover(ebook['ebook__cover']), 'name' : ebook['ebook__name'], 'update' : convertDate(str(ebook['ebook__update']))}
             listEbook.append(data)
     return listEbook
 
@@ -229,7 +226,7 @@ def getEbooksByNameAuthor(nameAuthor):
         if ebook['id'] in listEbook18:
             pass
         else:
-            data = {'id' :ebook['id'], 'cover' : ebook['cover'], 'name' : ebook['name'], 'update' : str(ebook['update'])}
+            data = {'id' :ebook['id'], 'cover' :  convertCover(ebook['cover']), 'name' : ebook['name'], 'update' : convertDate(str(ebook['update']))}
             listEbook.append(data)
     return listEbook
 
@@ -249,9 +246,50 @@ def getEbooksByNameEbook(nameEbook):
         if ebook['id'] in listEbook18:
             pass
         else:
-            data = {'id' :ebook['id'], 'cover' : ebook['cover'], 'name' : ebook['name'], 'update' : str(ebook['update'])}
+            data = {'id' :ebook['id'], 'cover' :  convertCover(ebook['cover']), 'name' : ebook['name'], 'update' : convertDate(str(ebook['update']))}
             listEbook.append(data)
     return listEbook
+
+
+def getTotalEbookInCategory():
+    """
+    search total ebook in category
+    :return: list total and name category
+    """
+    listEbook18 = getEbooksBy18()
+    filters = Q()
+    ebooks = Category.objects.filter(filters)\
+        .values('bookcat__category_id')\
+        .annotate(totalEbook=Count('bookcat__ebook_id'))\
+        .values('name','totalEbook')
+    listEbook = []
+    for ebook in ebooks:
+        if ebook['name'] in API_BLOCK_CATEGORY:
+            pass
+        else:
+            data = {'name' :ebook['name'], 'total' : ebook['totalEbook']}
+            listEbook.append(data)
+    return listEbook
+
+
+
+def convertDate(date):
+    """
+    convert date: yyyy-dd-mm
+    :param date: string
+    :return:string
+    """
+    return date[:10]
+
+def convertCover(url):
+    """
+    convert url
+    :param date: string
+    :return:string
+    """
+    url = url.replace('\r','')
+    url = url.replace('\n','')
+    return url
 
 
 #----------------------------------ket thuc Hieu viet method----------------------------------------------
