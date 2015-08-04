@@ -261,13 +261,13 @@ def getTotalEbookInCategory():
     ebooks = Category.objects.filter(filters)\
         .values('bookcat__category_id')\
         .annotate(totalEbook=Count('bookcat__ebook_id'))\
-        .values('name','totalEbook')
+        .values('name','totalEbook','id')
     listEbook = []
     for ebook in ebooks:
         if ebook['name'] in API_BLOCK_CATEGORY:
             pass
         else:
-            data = {'name' :ebook['name'], 'total' : ebook['totalEbook']}
+            data = {'name' :ebook['name'], 'total' : ebook['totalEbook'], 'id' : ebook['id']}
             listEbook.append(data)
     return listEbook
 
