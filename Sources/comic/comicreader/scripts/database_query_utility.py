@@ -47,7 +47,7 @@ def getAllChapterEbook(ebook_id):
     :return: list chapter
     """
     filters = Q(ebook_id= ebook_id)
-    listChapters = Chapter.objects.filter(filters).values("id","url","name")
+    listChapters = Chapter.objects.filter(filters).values("id","url","name","update")
     return listChapters
 
 def getChapterById(chapter_id):
@@ -256,7 +256,6 @@ def getTotalEbookInCategory():
     search total ebook in category
     :return: list total and name category
     """
-    listEbook18 = getEbooksBy18()
     filters = Q()
     ebooks = Category.objects.filter(filters)\
         .values('bookcat__category_id')\
@@ -272,6 +271,42 @@ def getTotalEbookInCategory():
     return listEbook
 
 
+def getTotalImageInChapter():
+    """
+    search total image in ch
+    :return: list total image and id chapter
+    """
+    listEbook18 = getEbooksBy18()
+    filters = Q()
+    ebooks = Image.objects.filter(filters)\
+        .values('chapter_id')\
+        .annotate(totalImage=Count('id'))\
+        .values('chapter_id', 'totalImage')
+    listEbook = []
+    for ebook in ebooks:
+        if ebook['chapter_id'] in listEbook18:
+            pass
+        else:
+            data = {'chapter_id' :ebook['chapter_id'], 'total' : ebook['totalImage']}
+            print data
+            listEbook.append(data)
+    return listEbook
+def getEbooksHot():
+    """
+    ebook hot
+    :return:list object Ebook
+    """
+    listEbook18 = getEbooksBy18()
+    filters = Q(id__in=API_ID_EBOOK_HOT)
+    ebooks = Ebook.objects.filter(filters).values('id','name','cover','update')
+    listEbook = []
+    for ebook in ebooks:
+        if ebook['id'] in listEbook18:
+            pass
+        else:
+            data = {'id' :ebook['id'], 'cover' :  convertCover(ebook['cover']), 'name' : ebook['name'], 'update' : convertDate(str(ebook['update']))}
+            listEbook.append(data)
+    return listEbook
 
 def convertDate(date):
     """
@@ -289,6 +324,8 @@ def convertCover(url):
     """
     url = url.replace('\r','')
     url = url.replace('\n','')
+    if url.endswith('.png'):
+        url = "http://library.aju.edu/uploadedImages/Ostrow_Library/library_books%5B2%5D.jpg"
     return url
 
 
@@ -314,4 +351,4 @@ def get_image_path_by_id(image_id):
     return path
 
 if __name__ == '__main__':
-    pass
+    getTotalImageInChapter()

@@ -59,6 +59,8 @@ def listEbooks(request):
             ebooks = database_query_utility.getEbooksByView()
         elif type == API_KEYWORD_TYPE_FAVORITE:
             ebooks = database_query_utility.getEbooksByFavorite()
+        elif type == API_KEYWORD_TYPE_HOT:
+            ebooks = database_query_utility.getEbooksHot()
         elif type == API_KEYWORD_TYPE_SEARCH:
             if search_type == API_KEYWORD_SEARCH_TYPE_AUTHOR:
                 ebooks = database_query_utility.getEbooksByNameAuthor(key_word)
@@ -139,8 +141,8 @@ def listChapter(request):
         if len(chapters)>0:
                 data = []
                 for idx in range(len(chapters)):
-                    data.append({'ebook_id': ebook_id, 'chapters':{'chapter_id': chapters[idx]['id'],'name': chapters[idx]['name']}})
-                    data_json = json.dumps(data)
+                    data.append({'chapter_id': chapters[idx]['id'],'name': chapters[idx]['name'],'update': database_query_utility.convertDate(str(chapters[idx]['update']))})
+                data_json = json.dumps({'ebook_id': ebook_id, 'chapters':data})
                 return HttpResponse(data_json, content_type='application/json', status=200)
         else:
             data = {'error': 'Data not found'}
