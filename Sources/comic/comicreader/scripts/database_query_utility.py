@@ -138,6 +138,8 @@ def getEbooksBy18():
     for ebook in ebooks:
         listEbook.append(ebook['bookcat__ebook__id'])
     return listEbook
+
+
 def getEbooksNew():
     """
     search ebook new limit 10
@@ -154,6 +156,7 @@ def getEbooksNew():
             data = {'id' :ebook['id'], 'cover' : convertCover(ebook['cover']), 'name' : ebook['name'], 'update' : convertDate(str(ebook['update']))}
             listEbook.append(data)
     return listEbook
+
 
 def getEbooksByCategoy(category):
     """
@@ -172,6 +175,7 @@ def getEbooksByCategoy(category):
             data = {'id' :ebook['bookcat__ebook__id'], 'cover' :  convertCover(ebook['bookcat__ebook__cover']), 'name' : ebook['bookcat__ebook__name'], 'update' : convertDate(str(ebook['bookcat__ebook__update']))}
             listEbook.append(data)
     return listEbook
+
 
 def getEbooksByView():
     """
@@ -256,6 +260,8 @@ def getTotalEbookInCategory():
     search total ebook in category
     :return: list total and name category
     """
+    cover = ''
+    listEbook18 = getEbooksBy18()
     filters = Q()
     ebooks = Category.objects.filter(filters)\
         .values('bookcat__category_id')\
@@ -263,12 +269,17 @@ def getTotalEbookInCategory():
         .values('name','totalEbook','id')
     listEbook = []
     for ebook in ebooks:
+        if len(Bookcat.objects.filter(category_id = ebook['id'])) > 0:
+            book_cat = Bookcat.objects.filter(category_id = ebook['id']).values("ebook_id")[0]
+            cover = Ebook.objects.filter(pk=book_cat["ebook_id"]).values("cover")[0]["cover"]
         if ebook['name'] in API_BLOCK_CATEGORY:
             pass
         else:
-            data = {'name' :ebook['name'], 'total' : ebook['totalEbook'], 'id' : ebook['id']}
+            data = {'name' :ebook['name'], 'total' : ebook['totalEbook'], 'id' : ebook['id'], 'cover' : cover}
             listEbook.append(data)
     return listEbook
+
+
 
 def getEbooksHot():
     """
