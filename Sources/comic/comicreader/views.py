@@ -41,6 +41,7 @@ def getCategory(request):
         data_json = json.dumps(data)
         return HttpResponse(data_json, content_type='application/json', status=404)
 
+
 def listEbooks(request):
     type = request.REQUEST.get('type')
     search_type = request.REQUEST.get('search_type')
@@ -141,7 +142,7 @@ def listChapter(request):
         if len(chapters)>0:
                 data = []
                 for idx in range(len(chapters)):
-                    data.append({'chapter_id': chapters[idx]['id'],'name': chapters[idx]['name'],'update': database_query_utility.convertDate(str(chapters[idx]['update']))})
+                    data.append({'chapter_id': chapters[idx]['id'], 'total': database_query_utility.getTotalImageInChapter(chapters[idx]['id']),'name': chapters[idx]['name'],'update': database_query_utility.convertDate(str(chapters[idx]['update']))})
                 data_json = json.dumps({'ebook_id': ebook_id, 'chapters':data})
                 return HttpResponse(data_json, content_type='application/json', status=200)
         else:

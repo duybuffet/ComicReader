@@ -270,27 +270,6 @@ def getTotalEbookInCategory():
             listEbook.append(data)
     return listEbook
 
-
-def getTotalImageInChapter():
-    """
-    search total image in ch
-    :return: list total image and id chapter
-    """
-    listEbook18 = getEbooksBy18()
-    filters = Q()
-    ebooks = Image.objects.filter(filters)\
-        .values('chapter_id')\
-        .annotate(totalImage=Count('id'))\
-        .values('chapter_id', 'totalImage')
-    listEbook = []
-    for ebook in ebooks:
-        if ebook['chapter_id'] in listEbook18:
-            pass
-        else:
-            data = {'chapter_id' :ebook['chapter_id'], 'total' : ebook['totalImage']}
-            print data
-            listEbook.append(data)
-    return listEbook
 def getEbooksHot():
     """
     ebook hot
@@ -307,6 +286,25 @@ def getEbooksHot():
             data = {'id' :ebook['id'], 'cover' :  convertCover(ebook['cover']), 'name' : ebook['name'], 'update' : convertDate(str(ebook['update']))}
             listEbook.append(data)
     return listEbook
+
+def getTotalImageInChapter(id):
+    """
+    search total image in chapter
+    :return: list total image and id chapter
+    """
+    listEbook18 = getEbooksBy18()
+    filters = Q(chapter_id=id)
+    ebooks = Image.objects.filter(filters)\
+        .values('chapter_id')\
+        .annotate(totalImage=Count('id'))\
+        .values('chapter_id', 'totalImage')
+    total = ''
+    for ebook in ebooks:
+        if ebook['chapter_id'] in listEbook18:
+            pass
+        else:
+            total= ebook['totalImage']
+    return total
 
 def convertDate(date):
     """
@@ -372,4 +370,4 @@ def get_ebooks_by_cat(cat_id):
 
 
 if __name__ == '__main__':
-    getTotalImageInChapter()
+    getTotalImageInChapter(1)
