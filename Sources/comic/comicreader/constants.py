@@ -24,3 +24,5 @@ API_KEYWORD_TYPE_HOT = 'hot'
 API_LIMIT_ELEMENT_SEARCH = 10
 API_BLOCK_CATEGORY = ['18+','16+','Ecchi','Adult']
 API_ID_EBOOK_HOT = [1,4,15,7]
+
+API_PATH_ABS = '/home/zero/PycharmProjects/ComicReader/Downloads/'
