@@ -405,7 +405,6 @@ def get_ebooks_by_cat(cat_id):
 
 
 if __name__ == '__main__':
-    print sys.path
     pass
     # for i in range(100):
     #     if(i!=0):
