@@ -132,11 +132,13 @@ def getEbooksBy18():
     search ebook 18+
     :return: list id of ebook 18+
     """
+    logging.info("Start function getEbooksBy18()")
     filters = Q(name__in=API_BLOCK_CATEGORY)
     ebooks = Category.objects.filter(filters).values('bookcat__ebook__id')
     listEbook = []
     for ebook in ebooks:
         listEbook.append(ebook['bookcat__ebook__id'])
+    logging.info("End function getEbooksBy18()")
     return listEbook
 
 
@@ -145,6 +147,7 @@ def getEbooksNew():
     search ebook new limit 10
     :return: list object Ebook
     """
+    logging.info("Start function getEbooksNew()")
     listEbook18 = getEbooksBy18()
     filters = Q()
     ebooks = Ebook.objects.filter(filters).order_by('update').reverse().values('id','name','cover','update')[:API_LIMIT_ELEMENT_SEARCH]
@@ -155,6 +158,7 @@ def getEbooksNew():
         else:
             data = {'id' :ebook['id'], 'cover' : convertCover(ebook['cover']), 'name' : ebook['name'], 'update' : convertDate(str(ebook['update']))}
             listEbook.append(data)
+    logging.info("End function getEbooksNew()")
     return listEbook
 
 
@@ -164,6 +168,7 @@ def getEbooksByCategoy(category):
     :param category:
     :return: list object Ebook
     """
+    logging.info("Start function getEbooksByCategoy()")
     listEbook18 = getEbooksBy18()
     filters = Q(name=category)
     ebooks = Category.objects.filter(filters).values('bookcat__ebook__id','bookcat__ebook__name','bookcat__ebook__cover','bookcat__ebook__update')
@@ -174,6 +179,7 @@ def getEbooksByCategoy(category):
         else:
             data = {'id' :ebook['bookcat__ebook__id'], 'cover' :  convertCover(ebook['bookcat__ebook__cover']), 'name' : ebook['bookcat__ebook__name'], 'update' : convertDate(str(ebook['bookcat__ebook__update']))}
             listEbook.append(data)
+    logging.info("End function getEbooksByCategoy()")
     return listEbook
 
 
@@ -182,6 +188,7 @@ def getEbooksByView():
     search ebook by views
     :return:list object Ebook
     """
+    logging.info("Start function getEbooksByView()")
     listEbook18 = getEbooksBy18()
     filters = Q()
     ebooks = ViewCount.objects.filter(filters).order_by('num_view').values('ebook__id','ebook__name','ebook__cover','ebook__update')
@@ -192,6 +199,7 @@ def getEbooksByView():
         else:
             data = {'id' :ebook['ebook__id'], 'cover' :  convertCover(ebook['ebook__cover']), 'name' : ebook['ebook__name'], 'update' : convertDate(str(ebook['ebook__update']))}
             listEbook.append(data)
+    logging.info("End function getEbooksByView()")
     return listEbook
 
 
@@ -200,6 +208,7 @@ def getEbooksByFavorite():
     search ebook by favorite
     :return: list object Ebook
     """
+    logging.info("Start function getEbooksByFavorite()")
     listEbook18 = getEbooksBy18()
     filters = Q()
     ebooks = Favorite.objects.filter(filters)\
@@ -214,6 +223,7 @@ def getEbooksByFavorite():
         else:
             data = {'id' :ebook['ebook__id'], 'cover' :  convertCover(ebook['ebook__cover']), 'name' : ebook['ebook__name'], 'update' : convertDate(str(ebook['ebook__update']))}
             listEbook.append(data)
+    logging.info("End function getEbooksByFavorite()")
     return listEbook
 
 def getEbooksByNameAuthor(nameAuthor):
@@ -222,6 +232,7 @@ def getEbooksByNameAuthor(nameAuthor):
     :param nameauthor: name author
     :return:list object Ebook
     """
+    logging.info("Start function getEbooksByNameAuthor()")
     listEbook18 = getEbooksBy18()
     filters = Q(author__contains=nameAuthor)
     ebooks = Ebook.objects.filter(filters).values('id','name','cover','update')
@@ -232,6 +243,7 @@ def getEbooksByNameAuthor(nameAuthor):
         else:
             data = {'id' :ebook['id'], 'cover' :  convertCover(ebook['cover']), 'name' : ebook['name'], 'update' : convertDate(str(ebook['update']))}
             listEbook.append(data)
+    logging.info("End function getEbooksByNameAuthor()")
     return listEbook
 
 
@@ -242,6 +254,7 @@ def getEbooksByNameEbook(nameEbook):
     :param nameauthor: name ebook
     :return:list object Ebook
     """
+    logging.info("Start function getEbooksByNameEbook()")
     listEbook18 = getEbooksBy18()
     filters = Q(name__contains=nameEbook)
     ebooks = Ebook.objects.filter(filters).values('id','name','cover','update')
@@ -252,6 +265,7 @@ def getEbooksByNameEbook(nameEbook):
         else:
             data = {'id' :ebook['id'], 'cover' :  convertCover(ebook['cover']), 'name' : ebook['name'], 'update' : convertDate(str(ebook['update']))}
             listEbook.append(data)
+    logging.info("End function getEbooksByNameEbook()")
     return listEbook
 
 
@@ -260,6 +274,7 @@ def getTotalEbookInCategory():
     search total ebook in category
     :return: list total and name category
     """
+    logging.info("Start function getTotalEbookInCategory()")
     cover = ''
     listEbook18 = getEbooksBy18()
     filters = Q()
@@ -277,6 +292,7 @@ def getTotalEbookInCategory():
         else:
             data = {'name' :ebook['name'], 'total' : ebook['totalEbook'], 'id' : ebook['id'], 'cover' : cover}
             listEbook.append(data)
+    logging.info("End function getTotalEbookInCategory()")
     return listEbook
 
 
@@ -286,6 +302,7 @@ def getEbooksHot():
     ebook hot
     :return:list object Ebook
     """
+    logging.info("Start function getEbooksHot()")
     listEbook18 = getEbooksBy18()
     filters = Q(id__in=API_ID_EBOOK_HOT)
     ebooks = Ebook.objects.filter(filters).values('id','name','cover','update')
@@ -296,6 +313,7 @@ def getEbooksHot():
         else:
             data = {'id' :ebook['id'], 'cover' :  convertCover(ebook['cover']), 'name' : ebook['name'], 'update' : convertDate(str(ebook['update']))}
             listEbook.append(data)
+    logging.info("End function getEbooksHot()")
     return listEbook
 
 def getTotalImageInChapter(id):
@@ -303,6 +321,7 @@ def getTotalImageInChapter(id):
     search total image in chapter
     :return: list total image and id chapter
     """
+    logging.info("Start function getTotalImageInChapter()")
     listEbook18 = getEbooksBy18()
     filters = Q(chapter_id=id)
     ebooks = Image.objects.filter(filters)\
@@ -315,6 +334,7 @@ def getTotalImageInChapter(id):
             pass
         else:
             total= ebook['totalImage']
+    logging.info("End function getTotalImageInChapter()")
     return total
 
 def convertDate(date):
@@ -334,7 +354,7 @@ def convertCover(url):
     url = url.replace('\r','')
     url = url.replace('\n','')
     if url.endswith('.png'):
-        url = "http://library.aju.edu/uploadedImages/Ostrow_Library/library_books%5B2%5D.jpg"
+        url = "http://os-jpupacic-omis.skole.hr/upload/os-jpupacic-omis/images/static3/1241/Image/jpg_1666-boy-with-books-in-their-hands.jpg"
     return url
 
 #-----------------------------fix real_path of images -------------------------

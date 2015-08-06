@@ -19,6 +19,24 @@ from django.utils import timezone
 from comicreader.models import *
 from comicreader.constants import *
 
+#----------Hieu--------------
+
+
+def insert_access_history(access_history):
+    logging.info("Start function insert_access_history()")
+    try:
+        logging.debug("categories : %s"  %access_history)
+        for access in access_history:
+            access.save()
+    except Exception as inst:
+        logging.error(type(inst))
+        logging.error(inst)
+        return 0
+    logging.info("End function insert_access_history()")
+    return 1
+
+#----------------------------
+
 
 def insert_categories(categories):
     """
