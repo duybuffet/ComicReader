@@ -341,10 +341,10 @@ def convertCover(url):
 def fixPath(id):
     """
 
-    test list real_path of Image
-    :return: list real_path (text)
+    fix real_path of Images
+    :return:
     """
-    Old_path = '/home/zero/PycharmProjects/ComicReader/Downloads/'
+    Old_path = API_PATH_ABS
     path = getPath(id)
     filters = Q(id=id)
     Image.objects.filter(filters).update(real_path=path.replace(Old_path,''))
@@ -406,7 +406,3 @@ def get_ebooks_by_cat(cat_id):
 
 if __name__ == '__main__':
     pass
-    # for i in range(100):
-    #     if(i!=0):
-    #         fixPath(i)
-    #         print getPath(i)
