@@ -4,6 +4,7 @@ import json
 from comicreader.models import *
 from scripts import database_query_utility
 from comicreader.constants import *
+from django.core.paginator import Paginator
 # Create your views here.
 
 def index(request):
@@ -46,27 +47,61 @@ def listEbooks(request):
     type = request.REQUEST.get('type')
     search_type = request.REQUEST.get('search_type')
     key_word = request.REQUEST.get('key_word')
+
+    if request.REQUEST.get('page'):
+        page = int(request.REQUEST.get('page'))
+    else:
+        page = 1
+
     if request.method == 'GET':
         response_data = {}
         response_data['type'] = type
         response_data['search_type'] = search_type
-        response_data['key_word'] = key_word
+        response_data['page'] = page
         ebooks = []
         if type == API_KEYWORD_TYPE_NEW:
-            ebooks = database_query_utility.getEbooksNew()
+            pages = Paginator(database_query_utility.getEbooksNew(),API_LIMIT_ELEMENT_PAGE)
+            if page <= pages.num_pages and page>0:
+                ebooks = pages.page(page).object_list
+            else:
+                ebooks = pages.page(1).object_list
         elif type == API_KEYWORD_TYPE_CATEGORY:
-            ebooks = database_query_utility.getEbooksByCategoy(key_word)
+            pages =  Paginator(database_query_utility.getEbooksByCategoy(key_word),API_LIMIT_ELEMENT_PAGE)
+            if page <= pages.num_pages and page>0:
+                ebooks = pages.page(page).object_list
+            else:
+                ebooks = pages.page(1).object_list
         elif type == API_KEYWORD_TYPE_READ_MOST:
-            ebooks = database_query_utility.getEbooksByView()
+            pages = Paginator(database_query_utility.getEbooksByView(),API_LIMIT_ELEMENT_PAGE)
+            if page <= pages.num_pages and page>0:
+                ebooks = pages.page(page).object_list
+            else:
+                ebooks = pages.page(1).object_list
         elif type == API_KEYWORD_TYPE_FAVORITE:
-            ebooks = database_query_utility.getEbooksByFavorite()
+            pages = Paginator(database_query_utility.getEbooksByFavorite(),API_LIMIT_ELEMENT_PAGE)
+            if page <= pages.num_pages and page>0:
+                ebooks = pages.page(page).object_list
+            else:
+                ebooks = pages.page(1).object_list
         elif type == API_KEYWORD_TYPE_HOT:
-            ebooks = database_query_utility.getEbooksHot()
+            pages = Paginator(database_query_utility.getEbooksHot(),API_LIMIT_ELEMENT_PAGE)
+            if page <= pages.num_pages and page>0:
+                ebooks = pages.page(page).object_list
+            else:
+                ebooks = pages.page(1).object_list
         elif type == API_KEYWORD_TYPE_SEARCH:
             if search_type == API_KEYWORD_SEARCH_TYPE_AUTHOR:
-                ebooks = database_query_utility.getEbooksByNameAuthor(key_word)
+                pages = Paginator(database_query_utility.getEbooksByNameAuthor(key_word),API_LIMIT_ELEMENT_PAGE)
+                if page <= pages.num_pages and page>0:
+                    ebooks = pages.page(page).object_list
+                else:
+                    ebooks = pages.page(1).object_list
             elif search_type == API_KEYWORD_SEARCH_TYPE_EBOOK:
-                ebooks = database_query_utility.getEbooksByNameEbook(key_word)
+                pages = Paginator(database_query_utility.getEbooksByNameEbook(key_word),API_LIMIT_ELEMENT_PAGE)
+                if page <= pages.num_pages and page>0:
+                    ebooks = pages.page(page).object_list
+                else:
+                    ebooks = pages.page(1).object_list
             else:
                 data = {'error': 'Data not found'}
                 data_json = json.dumps(data)

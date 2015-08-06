@@ -25,7 +25,7 @@ from comicreader.constants import *
 def insert_access_history(access_history):
     logging.info("Start function insert_access_history()")
     try:
-        logging.debug("categories : %s"  %access_history)
+        logging.debug("access_history: %s"  %access_history)
         for access in access_history:
             access.save()
     except Exception as inst:
@@ -33,6 +33,35 @@ def insert_access_history(access_history):
         logging.error(inst)
         return 0
     logging.info("End function insert_access_history()")
+    return 1
+
+
+#---------------dang lam ----------------
+
+
+def update_access_history(access_history):
+    """
+    Update images real_path and base on real_path, update its status
+    :param: image - image will be updated
+    :return: 1 if success
+             0 otherwise
+    """
+    logging.info("Start function update_access_history()")
+    try:
+        logging.debug("AccessHistory.object.filter(id=access_history.id) : %s" %Image.objects.filter(id=access_history.id))
+        if AccessHistory.objects.filter(id=access_history.id):
+            access_history_update = Image.objects.filter(id=access_history.id)[0]
+            logging.debug("access_history_update : %s"%Image.objects.filter(id=access_history.id)[0])
+            access_history_update.num_request += 1
+            access_history_update.save()
+            return 1
+        else:
+            return 0
+    except Exception as inst:
+        logging.error(type(inst))
+        logging.error(inst)
+        return 0
+    logging.info("End function update_access_history()")
     return 1
 
 #----------------------------
