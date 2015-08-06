@@ -375,8 +375,7 @@ def get_image_path_by_id(image_id):
 
     path = ""
     try:
-        path = API_PATH_ABS + Image.objects.filter(pk=image_id)[0].real_path
-        print path
+        path = os.path.join(API_PATH_ABS, Image.objects.filter(pk=image_id)[0].real_path)
     except Exception as inst:
         logging.error(type(inst))
         logging.error(inst)
