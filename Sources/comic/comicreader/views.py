@@ -58,50 +58,51 @@ def listEbooks(request):
         response_data['type'] = type
         response_data['search_type'] = search_type
         response_data['page'] = page
+        response_data['max_page'] = 'False'
         ebooks = []
         if type == API_KEYWORD_TYPE_NEW:
             pages = Paginator(database_query_utility.getEbooksNew(),API_LIMIT_ELEMENT_PAGE)
             if page <= pages.num_pages and page>0:
                 ebooks = pages.page(page).object_list
             else:
-                ebooks = pages.page(1).object_list
+                response_data['max_page'] = 'True'
         elif type == API_KEYWORD_TYPE_CATEGORY:
             pages =  Paginator(database_query_utility.getEbooksByCategoy(key_word),API_LIMIT_ELEMENT_PAGE)
             if page <= pages.num_pages and page>0:
                 ebooks = pages.page(page).object_list
             else:
-                ebooks = pages.page(1).object_list
+                response_data['max_page'] = 'True'
         elif type == API_KEYWORD_TYPE_READ_MOST:
             pages = Paginator(database_query_utility.getEbooksByView(),API_LIMIT_ELEMENT_PAGE)
             if page <= pages.num_pages and page>0:
                 ebooks = pages.page(page).object_list
             else:
-                ebooks = pages.page(1).object_list
+                response_data['max_page'] = 'True'
         elif type == API_KEYWORD_TYPE_FAVORITE:
             pages = Paginator(database_query_utility.getEbooksByFavorite(),API_LIMIT_ELEMENT_PAGE)
             if page <= pages.num_pages and page>0:
                 ebooks = pages.page(page).object_list
             else:
-                ebooks = pages.page(1).object_list
+                response_data['max_page'] = 'True'
         elif type == API_KEYWORD_TYPE_HOT:
             pages = Paginator(database_query_utility.getEbooksHot(),API_LIMIT_ELEMENT_PAGE)
             if page <= pages.num_pages and page>0:
                 ebooks = pages.page(page).object_list
             else:
-                ebooks = pages.page(1).object_list
+                response_data['max_page'] = 'True'
         elif type == API_KEYWORD_TYPE_SEARCH:
             if search_type == API_KEYWORD_SEARCH_TYPE_AUTHOR:
                 pages = Paginator(database_query_utility.getEbooksByNameAuthor(key_word),API_LIMIT_ELEMENT_PAGE)
                 if page <= pages.num_pages and page>0:
                     ebooks = pages.page(page).object_list
                 else:
-                    ebooks = pages.page(1).object_list
+                    response_data['max_page'] = 'True'
             elif search_type == API_KEYWORD_SEARCH_TYPE_EBOOK:
                 pages = Paginator(database_query_utility.getEbooksByNameEbook(key_word),API_LIMIT_ELEMENT_PAGE)
                 if page <= pages.num_pages and page>0:
                     ebooks = pages.page(page).object_list
                 else:
-                    ebooks = pages.page(1).object_list
+                    response_data['max_page'] = 'True'
             else:
                 data = {'error': 'Data not found'}
                 data_json = json.dumps(data)
