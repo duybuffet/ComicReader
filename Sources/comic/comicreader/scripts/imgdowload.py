@@ -73,7 +73,7 @@ def download_photo(path, img_url, filename):
 
 
 if __name__ == '__main__':
-    for i in range(1281,1285): #1000,2000
+    for i in range(1000,2000): #1000,2000
         images = getImageUrls(i)
         if images:
             image = images[0]
