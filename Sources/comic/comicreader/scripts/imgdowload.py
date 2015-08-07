@@ -73,14 +73,17 @@ def download_photo(path, img_url, filename):
 
 
 if __name__ == '__main__':
-    for i in range(1000,2000): #1000,2000
+    for i in range(1000,14000): #1000,2000
         images = getImageUrls(i)
         if images:
             image = images[0]
-            path = dirNameChapter(dirNameEbook(image['chapter__ebook__name']),image['chapter__name'])
-            file_name = str(image['id'])+'_'+ image['name']
-            update_image(download_photo(path,image['url'],file_name))
-            fixPath(i)
-            print getPath(i)
+            if "/" in image['chapter__ebook__name'] or "/" in image['chapter__name']:
+                print str(image['id']) +"     ekook:"+ image['chapter__ebook__name']+"     chapter:"+ image['chapter__name']
+
+            # path = dirNameChapter(dirNameEbook(image['chapter__ebook__name']),image['chapter__name'])
+            # file_name = str(image['id'])+'_'+ image['name']
+            # update_image(download_photo(path,image['url'],file_name))
+            # fixPath(i)
+            # print getPath(i)
         else:
             pass

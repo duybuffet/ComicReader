@@ -109,4 +109,4 @@ STATIC_URL = '/static/'
 # Folder dowload images
 # PATH_DATA_IMAGE='/home/zero/PycharmProjects/ComicReader/Downloads/images/'
 PATH_DATA_IMAGE= '/home/ubuntu/Comicreader/images/'
-#'/home/ubuntu/Comicreader/images/' #sever : '/home/ubuntu/Comicreader/images/'
+#'/home/zero/PycharmProjects/ComicReader/Downloads/images/' #sever : '/home/ubuntu/Comicreader/images/'

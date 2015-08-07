@@ -229,13 +229,25 @@ def get_mime_type(real_path):
 
 def get_ebooks_by_category(request):
     category_id = request.GET.get("category_id")
-    data = database_query_utility.get_ebooks_by_cat(category_id)
-    # print data
-    if len(data)>0:
-        data_json = json.dumps(data)
-        return HttpResponse(data_json, content_type='application/json', status=200)
+    if request.REQUEST.get('page'):
+        page = int(request.REQUEST.get('page'))
+    else:
+        page = 1
+    response_data = {}
+    response_data['category_id'] = category_id
+    response_data['max_page'] = 'False'
+    ebooks=[]
+    if request.method == 'GET':
+        pages = Paginator(database_query_utility.get_ebooks_by_cat(category_id),API_LIMIT_ELEMENT_PAGE)
+        if page <= pages.num_pages and page>0:
+            ebooks = pages.page(page).object_list
+        else:
+            response_data['max_page'] = 'True'
+        # print data
+        response_data['ebooks'] = ebooks
+        response = HttpResponse(json.dumps(response_data), content_type="application/json", status=200)
+        return response
     else:
         data = {'error': 'Data not found'}
         data_json = json.dumps(data)
         return HttpResponse(data_json, content_type='application/json', status=404)
-        pass

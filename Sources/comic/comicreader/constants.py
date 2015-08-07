@@ -28,4 +28,4 @@ API_BLOCK_CATEGORY = ['18+','16+','Ecchi','Adult']
 API_ID_EBOOK_HOT = [1,4,15,7,12,14,20,54,25,76,43,11]
 
 API_PATH_ABS= '/home/ubuntu/Comicreader/'
-# "/home/zero/PycharmProjects/ComicReader/Downloads"  #server:    /home/ubuntu/Comicreader/
+# "/home/zero/PycharmProjects/ComicReader/Downloads/"  #server:    /home/ubuntu/Comicreader/
