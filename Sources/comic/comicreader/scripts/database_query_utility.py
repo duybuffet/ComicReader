@@ -348,13 +348,15 @@ def getAllEbook():
     ebooks = Ebook.objects.filter(filters).values('id','name')
     listEbook = []
     for ebook in ebooks:
-        if ebook['id'] in listEbook18:
+        if ebook['id'] in listEbook18 or ebook['name'] == None:
             pass
         else:
             data = {'id' :ebook['id'], 'name' : ebook['name']}
+            print data
             listEbook.append(data)
     logging.info("End method getAllEbook()")
     return listEbook
+
 
 def convertDate(date):
     """
