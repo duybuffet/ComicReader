@@ -204,8 +204,8 @@ def update_image(image):
             image_update = Image.objects.filter(url=image.url)[0]
             logging.debug("image_update : %s"%Image.objects.filter(url=image.url)[0])
             logging.debug("image_update real_path : %s"%Image.objects.filter(url=image.url)[0].real_path)
-            print image_update.real_path
-            image_update.real_path = image.real_path
+            image_update.real_path = str(image.real_path)
+            print "image.real_path:  "+image.real_path
             if image.real_path.strip() == '':
                 image_update.status = IMAGE_STATUS_DOWNLOAD_FAILED
             else:

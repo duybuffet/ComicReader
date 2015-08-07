@@ -65,7 +65,6 @@ def download_photo(path, img_url, filename):
         downloaded_image.write(buf)
     downloaded_image.close()
     image_on_web.close()
-
     image = Image()
     image.url = img_url
     image.real_path = file_path

@@ -387,8 +387,9 @@ def fixPath(id):
     """
     Old_path = API_PATH_ABS
     path = getPath(id)
-    filters = Q(id=id)
-    Image.objects.filter(filters).update(real_path=path.replace(Old_path,''))
+    if path!=None:
+        filters = Q(id=id)
+        Image.objects.filter(filters).update(real_path=path.replace(Old_path,''))
 
 
 def getPath(id):
@@ -400,9 +401,21 @@ def getPath(id):
     images = Image.objects.filter(filters).values('id','real_path')
     path = ''
     for image in images:
-         path = image['real_path']
+        path = image['real_path']
     return path
 
+
+def getUrl(id):
+    """
+    get real_path of images
+    :return:  real_path (text)
+    """
+    filters = Q(id=id)
+    images = Image.objects.filter(filters).values('id','url')
+    path = ''
+    for image in images:
+        path = image['url']
+    return path
 #----------------------------------ket thuc Hieu viet method----------------------------------------------
 
 def get_image_path_by_id(image_id):
@@ -422,6 +435,7 @@ def get_image_path_by_id(image_id):
         logging.error(inst)
 
     logging.info("End function get_image_path_by_id()")
+    print path
     return path
 
 def get_ebooks_by_cat(cat_id):
@@ -446,4 +460,7 @@ def get_ebooks_by_cat(cat_id):
 
 
 if __name__ == '__main__':
+    for i in range(1300,14000):
+        if '+' in getUrl(i):
+            print str(i)+'    '+getUrl(i)
     pass
