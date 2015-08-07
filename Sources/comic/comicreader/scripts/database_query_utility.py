@@ -337,6 +337,25 @@ def getTotalImageInChapter(id):
     logging.info("End function getTotalImageInChapter()")
     return total
 
+def getAllEbook():
+    """
+    get id and name of All Ebook
+    :return: list object Ebook
+    """
+    logging.info("Start method getAllEbook()")
+    listEbook18 = getEbooksBy18()
+    filters = Q()
+    ebooks = Ebook.objects.filter(filters).values('id','name')
+    listEbook = []
+    for ebook in ebooks:
+        if ebook['id'] in listEbook18:
+            pass
+        else:
+            data = {'id' :ebook['id'], 'name' : ebook['name']}
+            listEbook.append(data)
+    logging.info("End method getAllEbook()")
+    return listEbook
+
 def convertDate(date):
     """
     convert date: yyyy-dd-mm

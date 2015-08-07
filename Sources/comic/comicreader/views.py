@@ -107,6 +107,8 @@ def listEbooks(request):
                 data = {'error': 'Data not found'}
                 data_json = json.dumps(data)
                 return HttpResponse(data_json, content_type='application/json', status=404)
+        elif type == API_KEYWORD_TYPE_NULL:
+            ebooks = database_query_utility.getAllEbook()
         else:
             data = {'error': 'Data not found'}
             data_json = json.dumps(data)
